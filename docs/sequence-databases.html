@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 11 Sequence Databases | Computational Biology for All</title>
+  <meta name="description" content="A bioinformatics and computational biology book" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 11 Sequence Databases | Computational Biology for All" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="A bioinformatics and computational biology book" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 11 Sequence Databases | Computational Biology for All" />
+  
+  <meta name="twitter:description" content="A bioinformatics and computational biology book" />
+  
+
+<meta name="author" content="Avril Coglan and Nathan Brouwer" />
+
+
+<meta name="date" content="2021-01-02" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="downloading-sequences-from-uniprot-by-hand.html"/>
+<link rel="next" href="local-variation-in-gc-content-not-updated.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Computational Biology for All</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Boilerplate</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a><ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#changes-made-to-original-source"><i class="fa fa-check"></i><b>2.1</b> Changes made to original source</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="downloading-r.html"><a href="downloading-r.html"><i class="fa fa-check"></i><b>3</b> Downloading R</a><ul>
+<li class="chapter" data-level="3.1" data-path="downloading-r.html"><a href="downloading-r.html#introduction-to-r"><i class="fa fa-check"></i><b>3.1</b> Introduction to R</a></li>
+<li class="chapter" data-level="3.2" data-path="downloading-r.html"><a href="downloading-r.html#installing-r"><i class="fa fa-check"></i><b>3.2</b> Installing R</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="downloading-r.html"><a href="downloading-r.html#installing-r-on-a-windows-pc"><i class="fa fa-check"></i><b>3.2.1</b> Installing R on a Windows PC</a></li>
+<li class="chapter" data-level="3.2.2" data-path="downloading-r.html"><a href="downloading-r.html#how-to-install-r-on-non-windows-computers-eg.-macintosh-or-linux-computers"><i class="fa fa-check"></i><b>3.2.2</b> How to install R on non-Windows computers (eg. Macintosh or Linux computers)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="downloading-r.html"><a href="downloading-r.html#starting-r"><i class="fa fa-check"></i><b>3.3</b> Starting R</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="downloading-rstudio.html"><a href="downloading-rstudio.html"><i class="fa fa-check"></i><b>4</b> Downloading RStudio</a><ul>
+<li class="chapter" data-level="4.1" data-path="downloading-rstudio.html"><a href="downloading-rstudio.html#installing-rstudio"><i class="fa fa-check"></i><b>4.1</b> Installing RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="downloading-rstudio.html"><a href="downloading-rstudio.html#getting-to-know-rstudio"><i class="fa fa-check"></i><b>4.2</b> Getting to know RStudio</a></li>
+<li class="chapter" data-level="4.3" data-path="downloading-rstudio.html"><a href="downloading-rstudio.html#rstudio-versus-rstudio-cloud"><i class="fa fa-check"></i><b>4.3</b> RStudio versus RStudio Cloud</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="installing-r-packages.html"><a href="installing-r-packages.html"><i class="fa fa-check"></i><b>5</b> Installing R packages</a><ul>
+<li class="chapter" data-level="5.1" data-path="installing-r-packages.html"><a href="installing-r-packages.html#downloading-packages-with-the-rstudio-gui"><i class="fa fa-check"></i><b>5.1</b> Downloading packages with the RStudio GUI</a></li>
+<li class="chapter" data-level="5.2" data-path="installing-r-packages.html"><a href="installing-r-packages.html#downloading-packages-with-the-function-install.packages"><i class="fa fa-check"></i><b>5.2</b> Downloading packages with the function install.packages()</a></li>
+<li class="chapter" data-level="5.3" data-path="installing-r-packages.html"><a href="installing-r-packages.html#using-packages-after-they-are-downloaded"><i class="fa fa-check"></i><b>5.3</b> Using packages after they are downloaded</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="installing-bioconductor.html"><a href="installing-bioconductor.html"><i class="fa fa-check"></i><b>6</b> Installing Bioconductor</a><ul>
+<li class="chapter" data-level="6.1" data-path="installing-bioconductor.html"><a href="installing-bioconductor.html#bioconductor"><i class="fa fa-check"></i><b>6.1</b> Bioconductor</a></li>
+<li class="chapter" data-level="6.2" data-path="installing-bioconductor.html"><a href="installing-bioconductor.html#installing-biocmanager"><i class="fa fa-check"></i><b>6.2</b> Installing BiocManager</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html"><i class="fa fa-check"></i><b>7</b> Brief introduction to R</a><ul>
+<li class="chapter" data-level="7.1" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html#vocabulary"><i class="fa fa-check"></i><b>7.1</b> Vocabulary</a></li>
+<li class="chapter" data-level="7.2" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html#r-functions-etc"><i class="fa fa-check"></i><b>7.2</b> R functions etc</a></li>
+<li class="chapter" data-level="7.3" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html#a-brief-introduction-to-r"><i class="fa fa-check"></i><b>7.3</b> A brief introduction to R</a></li>
+<li class="chapter" data-level="7.4" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html#links-and-further-reading"><i class="fa fa-check"></i><b>7.4</b> Links and Further Reading</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html"><i class="fa fa-check"></i><b>8</b> Introduction to NCBI databases</a><ul>
+<li class="chapter" data-level="8.1" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#to-do"><i class="fa fa-check"></i><b>8.1</b> To do</a></li>
+<li class="chapter" data-level="8.2" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#the-ncbi-sequence-database"><i class="fa fa-check"></i><b>8.2</b> The NCBI Sequence Database</a></li>
+<li class="chapter" data-level="8.3" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#the-ncbi-sub-databases"><i class="fa fa-check"></i><b>8.3</b> The NCBI Sub-Databases</a></li>
+<li class="chapter" data-level="8.4" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#searching-for-an-accession-number-in-the-ncbi-database"><i class="fa fa-check"></i><b>8.4</b> Searching for an accession number in the NCBI database</a></li>
+<li class="chapter" data-level="8.5" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#ncbi-sequence-format-ncbi-format"><i class="fa fa-check"></i><b>8.5</b> NCBI Sequence Format (NCBI Format)</a></li>
+<li class="chapter" data-level="8.6" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#refseq"><i class="fa fa-check"></i><b>8.6</b> RefSeq</a></li>
+<li class="chapter" data-level="8.7" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#querying-the-ncbi-database"><i class="fa fa-check"></i><b>8.7</b> Querying the NCBI Database</a></li>
+<li class="chapter" data-level="8.8" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#querying-the-ncbi-database-via-the-ncbi-website-for-reference"><i class="fa fa-check"></i><b>8.8</b> Querying the NCBI Database via the NCBI Website (for reference)</a></li>
+<li class="chapter" data-level="8.9" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#example-finding-the-sequences-published-in-nature-460352-358-for-reference"><i class="fa fa-check"></i><b>8.9</b> Example: finding the sequences published in Nature 460:352-358 (for reference)</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="downloading-ncbi-sequence-data-by-hand.html"><a href="downloading-ncbi-sequence-data-by-hand.html"><i class="fa fa-check"></i><b>9</b> Downloading NCBI sequence data by hand</a><ul>
+<li class="chapter" data-level="9.1" data-path="downloading-ncbi-sequence-data-by-hand.html"><a href="downloading-ncbi-sequence-data-by-hand.html#retrieving-genome-sequence-data-via-the-ncbi-website"><i class="fa fa-check"></i><b>9.1</b> Retrieving genome sequence data via the NCBI website</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html"><i class="fa fa-check"></i><b>10</b> Downloading sequences from UniProt by hand</a><ul>
+<li class="chapter" data-level="10.1" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#vocab"><i class="fa fa-check"></i><b>10.1</b> Vocab</a></li>
+<li class="chapter" data-level="10.2" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#uniprot"><i class="fa fa-check"></i><b>10.2</b> UniProt</a></li>
+<li class="chapter" data-level="10.3" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#viewing-the-uniprot-webpage-for-a-protein-sequence"><i class="fa fa-check"></i><b>10.3</b> Viewing the UniProt webpage for a protein sequence</a><ul>
+<li class="chapter" data-level="10.3.1" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#protein-function"><i class="fa fa-check"></i><b>10.3.1</b> Protein function</a></li>
+<li class="chapter" data-level="10.3.2" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#protein-sequence-and-size"><i class="fa fa-check"></i><b>10.3.2</b> Protein sequence and size</a></li>
+<li class="chapter" data-level="10.3.3" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#other-information"><i class="fa fa-check"></i><b>10.3.3</b> Other information</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#retrieving-a-uniprot-protein-sequence-via-the-uniprot-website"><i class="fa fa-check"></i><b>10.4</b> Retrieving a UniProt protein sequence via the UniProt website</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="sequence-databases.html"><a href="sequence-databases.html"><i class="fa fa-check"></i><b>11</b> Sequence Databases</a><ul>
+<li class="chapter" data-level="11.1" data-path="sequence-databases.html"><a href="sequence-databases.html#querying-the-ncbi-database-via-r"><i class="fa fa-check"></i><b>11.1</b> Querying the NCBI Database via R</a></li>
+<li class="chapter" data-level="11.2" data-path="sequence-databases.html"><a href="sequence-databases.html#summary"><i class="fa fa-check"></i><b>11.2</b> Summary</a></li>
+<li class="chapter" data-level="11.3" data-path="sequence-databases.html"><a href="sequence-databases.html#acknowledgements"><i class="fa fa-check"></i><b>11.3</b> Acknowledgements</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html"><i class="fa fa-check"></i><b>12</b> Local variation in GC content - NOT UPDATED</a><ul>
+<li class="chapter" data-level="12.0.1" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#note-on-the-biology-in-this-section"><i class="fa fa-check"></i><b>12.0.1</b> Note on the biology in this section</a></li>
+<li class="chapter" data-level="12.1" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#vocabulary-1"><i class="fa fa-check"></i><b>12.1</b> Vocabulary</a></li>
+<li class="chapter" data-level="12.2" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#reading-sequence-data-with-rentrezentrez_fetch"><i class="fa fa-check"></i><b>12.2</b> Reading sequence data with rentrez::entrez_fetch</a></li>
+<li class="chapter" data-level="12.3" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#local-variation-in-gc-content"><i class="fa fa-check"></i><b>12.3</b> Local variation in GC content</a></li>
+<li class="chapter" data-level="12.4" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#acknowledgements-1"><i class="fa fa-check"></i><b>12.4</b> Acknowledgements</a><ul>
+<li class="chapter" data-level="12.4.1" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#license"><i class="fa fa-check"></i><b>12.4.1</b> License</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#exercises"><i class="fa fa-check"></i><b>12.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="alignments-in-r-not-updayed.html"><a href="alignments-in-r-not-updayed.html"><i class="fa fa-check"></i><b>13</b> Alignments in R - NOT UPDAYED</a><ul>
+<li class="chapter" data-level="13.1" data-path="alignments-in-r-not-updayed.html"><a href="alignments-in-r-not-updayed.html#retrieving-a-uniprot-protein-sequence-using-seqinr"><i class="fa fa-check"></i><b>13.1</b> Retrieving a UniProt protein sequence using SeqinR</a></li>
+<li class="chapter" data-level="13.2" data-path="alignments-in-r-not-updayed.html"><a href="alignments-in-r-not-updayed.html#comparing-two-sequences-using-a-dotplot"><i class="fa fa-check"></i><b>13.2</b> Comparing two sequences using a dotplot</a></li>
+<li class="chapter" data-level="13.3" data-path="alignments-in-r-not-updayed.html"><a href="alignments-in-r-not-updayed.html#aligning-uniprot-sequences"><i class="fa fa-check"></i><b>13.3</b> Aligning UniProt sequences</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://https://github.com/brouwern/CB4ALL" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Computational Biology for All</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="sequence-databases" class="section level1">
+<h1><span class="header-section-number">Chapter 11</span> Sequence Databases</h1>
+<div id="querying-the-ncbi-database-via-r" class="section level2">
+<h2><span class="header-section-number">11.1</span> Querying the NCBI Database via R</h2>
+<p>Instead of carrying out searches of the NCBI database on the NCBI website, you can carry out searches directly from R by using the SeqinR R package.</p>
+<p>It is possible to use the SeqinR R package to retrieve sequences from these databases. The SeqinR package was written by the group that created the ACNUC database in Lyon, France (<a href="http://pbil.univ-lyon1.fr/databases/acnuc/acnuc.html" class="uri">http://pbil.univ-lyon1.fr/databases/acnuc/acnuc.html</a>). The ACNUC database is a database that contains most of the data from the NCBI Sequence Database, as well as data from other sequence databases such as UniProt and Ensembl.</p>
+<p>An advantage of the ACNUC database is that it brings together data from various different sources, and makes it easy to search, for example, by using the SeqinR R package.</p>
+<p>As will be explained below, the ACNUC database is organised into various different ACNUC (sub)-databases, which contain different parts of the NCBI database, and when you want to search the NCBI database via R, you will need to specify which ACNUC sub-database the NCBI data that you want to query is stored in.</p>
+<p>To obtain a full list of the ACNUC sub-databases that you can access using SeqinR, you can use the “choosebank()” function from SeqinR:</p>
+<blockquote>
+<p>library(“seqinr”) # Load the SeqinR R package
+choosebank() # List all the sub-databases in ACNUC
+[1] “genbank” “embl” “emblwgs” “swissprot”
+[5] “ensembl” “hogenom” “hogenomdna” “hovergendna”
+[9] “hovergen” “hogenom4” “hogenom4dna” “homolens”
+[13] “homolensdna” “hobacnucl” “hobacprot” “phever2”
+[17] “phever2dna” “refseq” “nrsub” “greviews”
+[21] “bacterial” “protozoan” “ensbacteria” “ensprotists”
+[25] “ensfungi” “ensmetazoa” “ensplants” “mito”
+[29] “polymorphix” “emglib” “taxobacgen” “refseqViruses”
+Alas, the ACNUC sub-databases do not have a one-to-one correspondence with the NCBI sub-databases (the NCBI Protein database, NCBI EST database, NCBI Genome database, etc.)!</p>
+</blockquote>
+<p>Three of the most important sub-databases in ACNUC which can be searched from R are:</p>
+<p>“genbank”: this contains DNA and RNA sequences from the NCBI Sequence Database, except for certain classes of sequences (eg. draft genome sequence data from genome sequencing projects)
+“refseq”: this contains DNA and RNA sequences from Refseq, the curated part of the NCBI Sequence Database
+“refseqViruses”: this contains DNA, RNA and proteins sequences from viruses from RefSeq
+You can find more information about what each of these ACNUC databases contains by looking at the ACNUC website.</p>
+<p>You can carry out complex queries using the “query()” function from the SeqinR package. If you look at the help page for the query() function (by typing “help(query)”, you will see that it allows you to specify criteria that you require the sequences to fulfill.</p>
+<p>For example, to search for a sequence with a particular NCBI accession, you can use the “AC=” argument in “query()”. The “query()” function will then search for sequences in the NCBI Sequence Database that match your criteria.</p>
+<p>Just as you can use “AC=” to specify an accession in a search, you can specify that you want to find sequences whose NCBI records contain a certain keywords by using “K=” as an argument (input) to the “query()” function. Likewise you can limit a search to either DNA or mRNA sequences by using the “M=” argument for the “query()” function. Here are some more possible arguments you can use in the “query()” function:</p>
+<p>Argument Example Restricts your search to sequences:
+“AC=” “AC=NC_001477” With a particular accession number
+“SP=” “SP=Chlamydia” From a particular organism or taxon
+“M=” “M=mRNA” Of a specific type (eg. mRNA)
+“J=” “J=Nature” Described in a paper published in a particular journal
+“R=” “R=Nature/460/352” Described in a paper in a particular journal, volume and start-page
+“AU=” “AU=Smith” Described in a paper, or submitted to NCBI, by a particular author
+The full list of possible arguments for the “query()” funtion are given on its help page. Here are some examples using the query function:</p>
+<p>Input to the query() function Searches for sequences:
+“AC=NC_001477” With accession number NC_001477
+“R=Nature/460/352” Published in Nature 460:352-358
+“SP=Chlamydia trachomatis” From the bacterium Chlamydia trachomatis
+“AU=Berriman” Published in a paper, or submitted to NCBI, by someone called Berriman
+“K=flagellin OR K=fibrinogen” Which have the keyword ‘flagellin’ or ‘fibrinogen’
+“SP=Mycobacterium leprae AND K=dnaA” Which are from M. leprae, and have the keyword “dnaA”
+“SP=Homo sapiens AND K=colon cancer” Which are from human, and have the keyword “colon cancer”
+“SP=Homo sapiens AND K=malaria” Which are from human, and have the keyword “malaria”
+“SP=Homo sapiens AND M=mrna” Which are mRNA sequences from human
+“SP=Bacteria” Which are sequences from Bacteria
+As explained above, the ACNUC database contains the NCBI sequence data organised into several sub-databases, and you can view the list of those sub-databases by using the “choosebank()” function from the SeqinR package. When you want to use “query()” to carry out a particular sub-database (eg. “genbank”, which contains DNA and RNA sequences from the NCBI Sequence Database), you need to first specify the database that you want to search by using the “choosebank()” function, for example:</p>
+<blockquote>
+<p>choosebank(“genbank”) # Specify that we want to search the ‘genbank’ ACNUC sub-database
+Likewise, to specify that we want to search the ‘refseq’ ACNUC sub-database, which contains sequences from the NCBI RefSeq database, we would type:</p>
+</blockquote>
+<blockquote>
+<p>choosebank(“refseq”) # Specify that we want to search the ‘refseq’ ACNUC sub-database
+Once you have specified which ACNUC sub-database you want to search, you can carry out a search of that sub-database by using the “query()” function. You need to pass the “query()” function both a name for your query (which you can make up), and the query itself (which will be in the format of the examples in the table above). For example, if we want to search for RefSeq sequences from Bacteria, we might decide to call our query “RefSeqBact”, and we would call the “query()” function as follows:</p>
+</blockquote>
+<blockquote>
+<p>query(“RefSeqBact”, “SP=Bacteria”)
+As explained below, the results of the search are stored in a list variable called “RefSeqBact”, and can be retrieved from that list variable. The last thing to do once you have completed your search is to close the connection to the ACNUC sub-database that you were searching, by typing:</p>
+</blockquote>
+<blockquote>
+<p>closebank()
+Thus, there are three steps involved in carrying out a query using SeqinR: first use “choosebank()” to select the ACNUC sub-database to search, secondly use “query()” to query the database, and thirdly use “closebank()” to close the connection to the ACNUC sub-database.</p>
+</blockquote>
+<p>Another example could be to search for mRNA sequences from the parasitic worm Schistosoma mansoni in the NCBI Nucleotide database. The appropriate ACNUC sub-database to search is the “genbank” ACNUC sub-database. We may decide to call our search “SchistosomamRNA”. Therefore, to carry out the search, we type in R:</p>
+<blockquote>
+<p>choosebank(“genbank”)
+query(“SchistosomamRNA”, “SP=Schistosoma mansoni AND M=mrna”)
+closebank()
+Example: finding the sequence for the DEN-1 Dengue virus genome
+Another example could be to search for the DEN-1 Dengue virus genome sequence, which has accession NC_001477. This is a viral genome sequence, and so should be in the ACNUC sub-database “refSeqViruses”. Thus to search for this sequence, calling our search “Dengue1”, we type in R:</p>
+</blockquote>
+<blockquote>
+<p>choosebank(“refseqViruses”)
+query(“Dengue1”, “AC=NC_001477”)
+The result of the search is now stored in the list variable Dengue1. Remember that a list is an R object that is like a vector, but can contain elements that are numeric and/or contain characters. In this case, the list Dengue1 contains information on the NCBI records that match the query (ie. information on the NCBI record for accession NC_001477).</p>
+</blockquote>
+<p>If you look at the help page for “query()”, the details of the arguments are given under the heading “Arguments”, and the details of the results (outputs) are given under the heading “Value”. If you read this now, you will see that it tells us that the result of the “query()” function is a list with six different named elements, named “call”, “name”, “nelem”, “typelist”, “req”, and “socket”. The content of each of these six named elements is explained, for example, the “nelem” element contains the number of sequences that match the query, and the “req” element contains their accession numbers.</p>
+<p>In our example, the list object Dengue1 is an output of the “query()” function, and so has each of these six named elements, as we can find out by using the “attributes()” function, and looking at the named elements listed under the heading “$names”:</p>
+<blockquote>
+<p>attributes(Dengue1)
+$names
+[1] “call” “name” “nelem” “typelist” “req” “socket”
+<span class="math inline">\(class [1] &quot;qaw&quot; As explained in the brief introduction to R, we can retrieve the value for each of the named elements in the list Dengue1 by using “\)</span>”, followed by the element’s name, for example, to get the value of the element named “nelem” in the list Dengue1, we type:</p>
+</blockquote>
+<blockquote>
+<p>Dengue1$nelem
+[1] 1
+This tells us that there was one sequence in the ‘refseqViruses’ ACNUC database that matched the query. This is what we would expect, as there should only be one sequence corresponding to accession NC_001477.</p>
+</blockquote>
+<p>To obtain the accession numbers of the sequence found, we can type:</p>
+<blockquote>
+<p>Dengue1$req
+[[1]]
+name length frame ncbicg
+“NC_001477” “10735” “0” “1”
+As expected, the accession number of the matching sequence is NC_001477.</p>
+</blockquote>
+<p>When you type “attributes(Dengue1)” you can see that there are two headings, “<span class="math inline">\(names”, and “\)</span>class”. As explained above, the named elements of the list variable Dengue1 are listed under the heading “<span class="math inline">\(names”. In fact, the headings “\)</span>names” and “<span class="math inline">\(class” are two attributes of the list variable Dengue1. We can retrieve the values of the attributes of a variable using the “attr()” function. For example, to retrieve the value of the attribute “\)</span>names” of Dengue1, we type:</p>
+<blockquote>
+<p>attr(Dengue1, “names”)
+[1] “call” “name” “nelem” “typelist” “req” “socket”
+This gives us the value of the attribute “<span class="math inline">\(names”, which contains the the names of the named elements of the list variable Dengue1. Similarly, we can retrieve the value of the a attribute “\)</span>class” of Dengue1, we type:</p>
+</blockquote>
+<blockquote>
+<p>attr(Dengue1, “class”)
+[1] “qaw”
+This tells us that the value of the attribute “$class” is “qaw”.</p>
+</blockquote>
+<p>The final step in retrieving a genomic DNA sequence is to use the “getSequence()” function to tell R to retrieve the sequence data. The command below uses “getSequence()” to retrieve the sequence data for the DEN-1 Dengue virus genome, and puts the sequence into a variable dengueseq:</p>
+<blockquote>
+<p>dengueseq &lt;- getSequence(Dengue1<span class="math inline">\(req[[1]]) Note that the input to the getSequence() command is Dengue1\)</span>req[[1]], which contains the name of the NCBI record that the list Dengue1 contains information about.</p>
+</blockquote>
+<p>Once you have retrieved a sequence, you can then print it out. The variable dengueseq is a vector containing the nucleotide sequence. Each element of the vector contains one nucleotide of the sequence. Therefore, we can print out the first 50 nucleotides of the DEN-1 Dengue genome sequence by typing:</p>
+<blockquote>
+<p>dengueseq[1:50]
+[1] “a” “g” “t” “t” “g” “t” “t” “a” “g” “t” “c” “t” “a” “c” “g” “t” “g” “g” “a”
+[20] “c” “c” “g” “a” “c” “a” “a” “g” “a” “a” “c” “a” “g” “t” “t” “t” “c” “g” “a”
+[39] “a” “t” “c” “g” “g” “a” “a” “g” “c” “t” “t” “g”
+Note that dengueseq[1:50] refers to the elements of the vector dengueseq with indices from 1-50. These elements contain the first 50 nucleotides of the DEN-1 Dengue virus genome sequence.</p>
+</blockquote>
+<p>As well as retrieving the DNA (or RNA or protein) sequence itself, SeqinR can also retrieve all the annotations for the sequence, for example, information on when the sequence was sequenced, who sequenced it, what organism is it from, what paper was it described in, what genes were identified in the sequence, and so on.</p>
+<p>Once you have retrieved a sequence using SeqinR, you can retrieved its annotations by using the “getAnnot()” function. For example, to view the annotations for the DEN-1 Dengue virus genome sequence, we type:</p>
+<blockquote>
+<p>annots &lt;- getAnnot(Dengue1$req[[1]])
+This stores the annotations information from the NCBI record for the DEN-1 Dengue virus sequence in a vector variable annots, with one line of the NCBI record in each element of the vector. Therefore, we can print out the first 20 lines of the NCBI record by typing:</p>
+</blockquote>
+<blockquote>
+<p>annots[1:20]
+[1] “LOCUS NC_001477 10735 bp ss-RNA linear VRL 08-DEC-2008”
+[2] “DEFINITION Dengue virus type 1, complete genome.”
+[3] “ACCESSION NC_001477”
+[4] “VERSION NC_001477.1 GI:9626685”
+[5] “DBLINK Project: 15306”
+[6] “KEYWORDS .”
+[7] “SOURCE Dengue virus 1”
+[8] " ORGANISM Dengue virus 1"
+[9] " Viruses; ssRNA positive-strand viruses, no DNA stage; Flaviviridae;"
+[10] " Flavivirus; Dengue virus group."
+[11] “REFERENCE 1 (bases 1 to 10735)”
+[12] " AUTHORS Puri,B., Nelson,W.M., Henchal,E.A., Hoke,C.H., Eckels,K.H.,"
+[13] " Dubois,D.R., Porter,K.R. and Hayes,C.G."
+[14] " TITLE Molecular analysis of dengue virus attenuation after serial passage"
+[15] " in primary dog kidney cells"
+[16] " JOURNAL J. Gen. Virol. 78 (PT 9), 2287-2291 (1997)"
+[17] " PUBMED 9292016"
+[18] “REFERENCE 2 (bases 1 to 10735)”
+[19] " AUTHORS McKee,K.T. Jr., Bancroft,W.H., Eckels,K.H., Redfield,R.R.,"
+[20] " Summers,P.L. and Russell,P.K."
+On the left of the annotations, you will see that there is a column containing the field name. For example, the line of the with “ACCESSION” in the left column is the accession field, which contains the accession for the sequence (NC_001477 for the DEN-1 Dengue virus).</p>
+</blockquote>
+<p>The line with “ORGANISM” in the left column is the organism field, and usually contains the Latin name for the organism (“Dengue virus 1” here). The line with “AUTHORS” in the left column is the authors field, and contain the names of authors that wrote papers to describe the sequence and/or the names of the people who submitted the sequence to the NCBI Database.</p>
+<p>When you have finished your running your query and getting the corresponding sequences and annotations, close the connection to the ACNUC sub-database:</p>
+<blockquote>
+<p>closebank()
+Example: finding the sequences published in Nature 460:352-358
+We described above how to search for the sequences published in Nature 460:352-358, using the NCBI website. A second method is to use the SeqinR R package to search the ACNUC databases (which contain the NCBI sequence data) from R.</p>
+</blockquote>
+<p>If you look at the help page the “query()” function, you see that you can query for sequences published in a particular paper using R=refcode, specifying the reference as refcode such as in jcode/volume/page (e.g., JMB/13/5432 or R=Nature/396/133). For the paper Nature 460:352-358, we would need to use the refcode ‘R=Nature/460/352’.</p>
+<p>First we need to specify which of the ACNUC databases we want to search. For example, to specify that we want to search the “genbank” ACNUC database, which contains DNA and RNA sequences from the NCBI Nucleotide database, we type:</p>
+<blockquote>
+<p>choosebank(“genbank”) # Specify that we want to search the ‘genbank’ ACNUC sub-database
+We can then search the ‘genbank’ database for sequences that match a specific set of criteria by using the “query()” function. For example, to search for sequences that were published in Nature 460:352-358, we type:</p>
+</blockquote>
+<blockquote>
+<p>query(‘naturepaper’, ‘R=Nature/460/352’)
+The line above tells R that we want to store the results of the query in an R list variable called naturepaper. To get the value of the element named “nelem” in the list naturepaper, we type:</p>
+</blockquote>
+<blockquote>
+<p>naturepaper$nelem
+[1] 19022
+This tells us that there were 19022 sequences in the ‘genbank’ ACNUC database that matched the query. The ‘genbank’ ACNUC database contains DNA or RNA sequences from the NCBI Nucleotide database. Why don’t we get the same number of sequences as found by carrying out the search on the NCBI website (where we found 50890 hits to the NCBI Nucleotide database)? The reason is that the ACNUC ‘genbank’ database does not contain all the sequences in the NCBI Nucleotide database, for example, it does not contain sequences that are in RefSeq or many short DNA sequences from sequencing projects.</p>
+</blockquote>
+<p>To obtain the accession numbers of the first five of the 19022 sequences, we can type:</p>
+<blockquote>
+<p>accessions &lt;- naturepaper$req
+accessions[1:5]
+[[1]]
+name length frame ncbicg
+“FN357292” “4179495” “0” “1”
+[[2]]
+name length frame ncbicg
+“FN357293” “2211188” “0” “1”
+[[3]]
+name length frame ncbicg
+“FN357294” “1818661” “0” “1”
+[[4]]
+name length frame ncbicg
+“FN357295” “2218116” “0” “1”
+[[5]]
+name length frame ncbicg
+“FN357296” “3831198” “0” “1”
+This tells us that the NCBI accessions of the first five sequences (of the 19022 DNA or RNA sequences found that were published in Nature 460:352-358) are FN357292, FN357293, FN357294, FN357295, and FN357296.</p>
+</blockquote>
+<p>To retrieve these first five sequences, and print out the first 10 nucleotide bases of each sequence, we use the getSequence() command, typing:</p>
+<blockquote>
+<p>for (i in 1:5)
+{
+seqi &lt;- getSequence(naturepaper<span class="math inline">\(req[[i]]) print(seqi[1:10]) } [1] &quot;t&quot; &quot;t&quot; &quot;g&quot; &quot;t&quot; &quot;c&quot; &quot;g&quot; &quot;a&quot; &quot;t&quot; &quot;t&quot; &quot;a&quot; [1] &quot;g&quot; &quot;g&quot; &quot;t&quot; &quot;c&quot; &quot;c&quot; &quot;t&quot; &quot;t&quot; &quot;a&quot; &quot;a&quot; &quot;g&quot; [1] &quot;g&quot; &quot;c&quot; &quot;c&quot; &quot;t&quot; &quot;g&quot; &quot;a&quot; &quot;c&quot; &quot;c&quot; &quot;a&quot; &quot;t&quot; [1] &quot;t&quot; &quot;a&quot; &quot;t&quot; &quot;t&quot; &quot;t&quot; &quot;c&quot; &quot;c&quot; &quot;a&quot; &quot;a&quot; &quot;t&quot; [1] &quot;c&quot; &quot;a&quot; &quot;a&quot; &quot;t&quot; &quot;c&quot; &quot;a&quot; &quot;c&quot; &quot;t&quot; &quot;c&quot; &quot;a&quot; Note that the input to the getSequence() command is Dengue1\)</span>req[[i]], which contains the name of i th NCBI record that the list naturepaper contains information about.</p>
+</blockquote>
+<p>Once we have carried out our queries and retrieved the sequences, the final step is to close the connection to the ACNUC sub-database that we searched (“genbank” here):</p>
+<blockquote>
+<p>closebank()
+Saving sequence data in a FASTA-format file
+Once you have retrieved a sequence, or set of sequences from the NCBI Database, using SeqinR, it is conveninent to save the sequences in a file in FASTA format. This can be done using the “write.fasta()” function in the SeqinR package, which was introduced in Chapter 1.</p>
+</blockquote>
+<p>If you look at the help page for the “write.fasta()” function, you will see that as input it takes a list of vectors, where each vector contains one DNA, RNA or protein sequence.</p>
+<p>For example, if you retrieve the sequences of human tRNAs from the NCBI Database by querying the ACNUC “genbank” sub-database, you can save the sequences in a FASTA format file called “humantRNAs.fasta” by typing:</p>
+<blockquote>
+<p>choosebank(“genbank”) # select the ACNUC sub-database to be searched
+query(“humtRNAs”, “SP=homo sapiens AND M=TRNA”) # specify the query
+myseqs &lt;- getSequence(humtRNAs) # get the sequences
+mynames &lt;- getName(humtRNAs) # get the names of the sequences
+write.fasta(myseqs, mynames, file.out=“humantRNAs.fasta”)
+closebank()
+In the above code, we get the sequences of the human tRNAs using the function “getSequence()” from the SeqinR package. We also use a function “getName()” from the SeqinR package to get the sequences’ names. Then we use the “write.fasta()” function to write the sequences to a FASTA file “humantRNAs.fasta”. The “write.fasta()” takes as arguments: the list myseqs containing the sequences, the list mynames containing the names of the sequences, and the name of the output file (“humantRNAs.fasta” here).</p>
+</blockquote>
+<p>Finding the genome sequence for a particular species
+Microbial genomes are generally smaller than eukaryotic genomes (Escherichia coli has about 5 million base pair in its genome, while the human genome is about 3 billion base pairs). Because they are considerably less expensive to sequence, many microbial genome sequencing projects have been completed.</p>
+<p>If you don’t know the accession number for a genome sequence (eg. for Mycobacterium leprae, the bacterium that causes leprosy), how can you find it out?</p>
+<p>The easiest way to do this is to look at the NCBI Genome website, which lists all fully sequenced genomes and gives the accession numbers for the corresponding DNA sequences.</p>
+<p>If you didn’t know the accession number for the Mycobacterium leprae genome, you could find it on the NCBI Genome website by following these steps:</p>
+<p>Go to the NCBI Genome website (<a href="http://www.ncbi.nlm.nih.gov/sites/entrez?db=Genome" class="uri">http://www.ncbi.nlm.nih.gov/sites/entrez?db=Genome</a>)
+On the homepage of the NCBI Genome website, it gives links to the major subdivisions of the Genome database, which include Eukaryota, Prokaryota (Bacteria and Archaea), and Viruses. Click on ‘Prokaryota’, since Mycobacterium leprae is a bacterium. This will bring up a list of all fully sequenced bacterial genomes, with the corresponding accession numbers. Note that more than one genome (from various strains) may have been sequenced for a particular species.
+Use ‘Find’ in the ‘Edit’ menu of your web browser to search for ‘Mycobacterium leprae’ on the webpage. You should find that the genomes of several different M. leprae strains have been sequenced. One of these is M. leprae TN, which has accession number NC_002677.
+The list of sequenced genomes on the NCBI Genomes website is not a definitive list; that is, some sequenced genomes may be missing from this list. If you want to find out whether a particular genome has been sequenced, but you don’t find it NCBI Genomes website’s list, you should search for it by following these steps:</p>
+<p>Go to the NCBI website (www.ncbi.nlm.nih.gov).
+Select ‘Genome’ from the drop-down list above the search box.
+Type the name of the species you are interested in in the search box (eg. “Mycobacterium leprae”[ORGN]). Press ‘Search’.
+Note that you could also have found the Mycobacterium leprae genome sequence by searching the NCBI Nucleotide database, as the NCBI Genome database is just a subset of the NCBI Nucleotide database.</p>
+<p>How many genomes have been sequenced, or are being sequenced now?
+On the NCBI Genome website (<a href="http://www.ncbi.nlm.nih.gov/sites/entrez?db=Genome" class="uri">http://www.ncbi.nlm.nih.gov/sites/entrez?db=Genome</a>), the front page gives a link to a list of all sequenced genomes in the groups Eukaryota, Prokaryota (Bacteria and Archaea) and Viruses. If you click on one of these links (eg. Prokaryota), at the top of the page it will give the number of sequenced genomes in that group (eg. number of sequenced prokaryotic genomes). For example, in this screenshot (from January 2011), we see that there were 1409 complete prokaryotic genomes (94 archaeal, 1315 bacterial):</p>
+<p>image1</p>
+<p>Another useful website that lists genome sequencing projects is the Genomes OnLine Database (GOLD), which lists genomes that have been completely sequenced, or are currently being sequenced. To find the number of complete or ongoing bacterial sequencing projects, follow these steps:</p>
+<p>Go to the GOLD website (<a href="http://genomesonline.org/" class="uri">http://genomesonline.org/</a>).
+Click on the yellow ‘Enter GOLD’ button in the centre of the webpage. On the subsequent page, it will give the number of ongoing bacterial, archaeal and eukaryotic genome sequencing projects.
+Click on the ‘Bacterial Ongoing’ link to see the list of ongoing bacterial genome sequencing projects. By default, just the first 100 projects are listed, and the rest are listed on subsequent pages. In one of the columns of the page, this gives the university or institute that the genome was sequenced in. Other columns give the taxonomic information for the organism, and links to the sequence data.
+Find the number of published genome sequencing projects. Go back one page, to the page with the ‘Bacterial Ongoing’ link. You will see that this page also lists the number of complete published genomes. To see a list of these genomes, click on ‘Complete Published’. This will bring up a page that gives the number of published genomes at the top of the page. In one column of the page, this gives the university or institute that the genome was sequenced in.
+As explained above, it is possible to identify genome sequence data in the NCBI Genome database. The GOLD database also gives some information about ongoing genome projects. Often, the GOLD database lists some ongoing projects that are not yet present in the NCBI Genome Database, because the sequence data has not yet been submitted to the NCBI Database. If you are interested in finding out how many genomes have been sequenced or are currently being sequenced for a particular species (eg. Mycobacterium leprae), it is a good idea to look at both the NCBI Genome database and at GOLD.</p>
+</div>
+<div id="summary" class="section level2">
+<h2><span class="header-section-number">11.2</span> Summary</h2>
+<p>In this chapter, you have learnt how to retrieve sequences from the NCBI Sequence database, as well as to find out how many genomes have been sequenced or are currently being sequenced for a particular species.</p>
+<p>Links and Further Reading
+There is detailed information on how to search the NCBI database on the NCBI Help website at <a href="http://www.ncbi.nlm.nih.gov/bookshelf/br.fcgi?book=helpentrez?part=EntrezHelp" class="uri">http://www.ncbi.nlm.nih.gov/bookshelf/br.fcgi?book=helpentrez?part=EntrezHelp</a>.</p>
+<p>There is more information about the GOLD database in the paper describing GOLD by Liolios et al, which is available at <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2808860/?tool=pubmed" class="uri">http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2808860/?tool=pubmed</a>.</p>
+<p>For more in-depth information and more examples on using the SeqinR package for sequence analysis, look at the SeqinR documentation, <a href="http://pbil.univ-lyon1.fr/software/seqinr/doc.php?lang=eng" class="uri">http://pbil.univ-lyon1.fr/software/seqinr/doc.php?lang=eng</a>.</p>
+<p>There is also a very nice chapter on “Analyzing Sequences”, which includes examples of using SeqinR for sequence analysis, in the book Applied statistics for bioinformatics using R by Krijnen (available online at cran.r-project.org/doc/contrib/Krijnen-IntroBioInfStatistics.pdf).</p>
+</div>
+<div id="acknowledgements" class="section level2">
+<h2><span class="header-section-number">11.3</span> Acknowledgements</h2>
+<p>’
+Contact
+I will be grateful if you will send me (Avril Coghlan) corrections or suggestions for improvements to my email address <a href="mailto:alc@sanger.ac.uk" class="email">alc@sanger.ac.uk</a></p>
+<p>License
+The content in this book is licensed under a Creative Commons Attribution 3.0 License.</p>
+<p>Exercises
+Answer the following questions. For each question, please record your answer, and what you did/typed to get this answer.</p>
+<p>Model answers to the exercises are given in Answers to the exercises on Sequence Databases.</p>
+<ol style="list-style-type: decimal">
+<li>What information about the rabies virus sequence (NCBI accession NC_001542) can you obtain from its annotations in the NCBI Sequence Database?
+What does it say in the DEFINITION and ORGANISM fields of its NCBI record? Note: rabies virus is the virus responsible for rabies, which is classified by the WHO as a neglected tropical disease.</li>
+<li>How many nucleotide sequences are there from the bacterium Chlamydia trachomatis in the NCBI Sequence Database?
+Note: the bacterium Chlamydia trachomatis is responsible for causing trachoma, which is classified by the WHO as a neglected tropical disease.</li>
+<li>How many nucleotide sequences are there from the bacterium Chlamydia trachomatis in the RefSeq part of the NCBI Sequence Database?</li>
+<li>How many nucleotide sequences were submitted to NCBI by Matthew Berriman?</li>
+<li>How many nucleotide sequences from nematode worms are there in the RefSeq Database?
+Note that several parasitic nematode worms cause neglected tropical diseases, including <em>Brugia malayi</em> and <em>Wucheria bancrofti</em>, which cause lymphatic filariasis; Loa loa, which causes subcutaneous filariasis; Onchocerca volvulus, which causes onchocerciasis; and Necator americanus, which causes soil-transmitted helminthiasis.</li>
+<li>How many nucleotide sequences for collagen genes from nematode worms are there in the NCBI Database?</li>
+<li>How many mRNA sequences for collagen genes from nematode worms are there in the NCBI Database?</li>
+<li>How many protein sequences for collagen proteins from nematode worms are there in the NCBI database?</li>
+<li>What is the accession number for the <em>Trypanosoma cruzi</em> genome in NCBI?
+Do you see genome sequences for more than one strain of Trypanosoma cruzi? Note that the Trypanosoma cruzi causes Chagas disease, which is classified as a neglected tropical disease by the WHO.</li>
+<li>How many fully sequenced nematode worm species are represented in the NCBI Genome database?</li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="downloading-sequences-from-uniprot-by-hand.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="local-variation-in-gc-content-not-updated.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["compbio4all.pdf", "compbio4all.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
