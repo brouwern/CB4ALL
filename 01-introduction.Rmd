@@ -1,0 +1,19 @@
+# Introduction 
+
+This book is based Dr. Avril Coghlan's [*A little book of R for bioinformatics.*](https://a-little-book-of-r-for-bioinformatics.readthedocs.io/en/latest/index.html).  Much of the text and code was originally written by Dr. Coghlan and distributed under the [Creative Commons 3.0](https://creativecommons.org/licenses/by/3.0/us/) license.  
+
+## Changes made to original source
+
+To meet the needs of my course I have
+
+1. Edited the original HTML document into  RMarkdown 
+1. Used the RStudio IDE instead of the basic R IDE
+1. Split up Coghlan's original chapters into short lessons
+1. Placed functions written by Coghlan into an R package instead of requiring that they be loaded by hand.  
+1. Changed which functions or packages are used; for example, replacing some SeqinR functions with rentrez functions.
+1. Added additional plots and changed some plotting functions, such as using ggplot2 and ggpubr.
+1. Removed .jpg images; I hope to add these back
+1. Fixed typos, removed dead links, and additional links, turned links to hypertext, converted to American English (sorry!)
+1. Added a summary section at the beginning listing the functions, vocabulary, software, organism, accession numbers
+
+

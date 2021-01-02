@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 13 Alignments in R - NOT UPDAYED | Computational Biology for All</title>
+  <meta name="description" content="A bioinformatics and computational biology book" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 13 Alignments in R - NOT UPDAYED | Computational Biology for All" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="A bioinformatics and computational biology book" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 13 Alignments in R - NOT UPDAYED | Computational Biology for All" />
+  
+  <meta name="twitter:description" content="A bioinformatics and computational biology book" />
+  
+
+<meta name="author" content="Avril Coglan and Nathan Brouwer" />
+
+
+<meta name="date" content="2021-01-02" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="local-variation-in-gc-content-not-updated.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Boilerplate</a></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction</a><ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#changes-made-to-original-source"><i class="fa fa-check"></i><b>2.1</b> Changes made to original source</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="downloading-r.html"><a href="downloading-r.html"><i class="fa fa-check"></i><b>3</b> Downloading R</a><ul>
+<li class="chapter" data-level="3.1" data-path="downloading-r.html"><a href="downloading-r.html#introduction-to-r"><i class="fa fa-check"></i><b>3.1</b> Introduction to R</a></li>
+<li class="chapter" data-level="3.2" data-path="downloading-r.html"><a href="downloading-r.html#installing-r"><i class="fa fa-check"></i><b>3.2</b> Installing R</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="downloading-r.html"><a href="downloading-r.html#installing-r-on-a-windows-pc"><i class="fa fa-check"></i><b>3.2.1</b> Installing R on a Windows PC</a></li>
+<li class="chapter" data-level="3.2.2" data-path="downloading-r.html"><a href="downloading-r.html#how-to-install-r-on-non-windows-computers-eg.-macintosh-or-linux-computers"><i class="fa fa-check"></i><b>3.2.2</b> How to install R on non-Windows computers (eg. Macintosh or Linux computers)</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="downloading-r.html"><a href="downloading-r.html#starting-r"><i class="fa fa-check"></i><b>3.3</b> Starting R</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="downloading-rstudio.html"><a href="downloading-rstudio.html"><i class="fa fa-check"></i><b>4</b> Downloading RStudio</a><ul>
+<li class="chapter" data-level="4.1" data-path="downloading-rstudio.html"><a href="downloading-rstudio.html#installing-rstudio"><i class="fa fa-check"></i><b>4.1</b> Installing RStudio</a></li>
+<li class="chapter" data-level="4.2" data-path="downloading-rstudio.html"><a href="downloading-rstudio.html#getting-to-know-rstudio"><i class="fa fa-check"></i><b>4.2</b> Getting to know RStudio</a></li>
+<li class="chapter" data-level="4.3" data-path="downloading-rstudio.html"><a href="downloading-rstudio.html#rstudio-versus-rstudio-cloud"><i class="fa fa-check"></i><b>4.3</b> RStudio versus RStudio Cloud</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="installing-r-packages.html"><a href="installing-r-packages.html"><i class="fa fa-check"></i><b>5</b> Installing R packages</a><ul>
+<li class="chapter" data-level="5.1" data-path="installing-r-packages.html"><a href="installing-r-packages.html#downloading-packages-with-the-rstudio-gui"><i class="fa fa-check"></i><b>5.1</b> Downloading packages with the RStudio GUI</a></li>
+<li class="chapter" data-level="5.2" data-path="installing-r-packages.html"><a href="installing-r-packages.html#downloading-packages-with-the-function-install.packages"><i class="fa fa-check"></i><b>5.2</b> Downloading packages with the function install.packages()</a></li>
+<li class="chapter" data-level="5.3" data-path="installing-r-packages.html"><a href="installing-r-packages.html#using-packages-after-they-are-downloaded"><i class="fa fa-check"></i><b>5.3</b> Using packages after they are downloaded</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="installing-bioconductor.html"><a href="installing-bioconductor.html"><i class="fa fa-check"></i><b>6</b> Installing Bioconductor</a><ul>
+<li class="chapter" data-level="6.1" data-path="installing-bioconductor.html"><a href="installing-bioconductor.html#bioconductor"><i class="fa fa-check"></i><b>6.1</b> Bioconductor</a></li>
+<li class="chapter" data-level="6.2" data-path="installing-bioconductor.html"><a href="installing-bioconductor.html#installing-biocmanager"><i class="fa fa-check"></i><b>6.2</b> Installing BiocManager</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html"><i class="fa fa-check"></i><b>7</b> Brief introduction to R</a><ul>
+<li class="chapter" data-level="7.1" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html#vocabulary"><i class="fa fa-check"></i><b>7.1</b> Vocabulary</a></li>
+<li class="chapter" data-level="7.2" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html#r-functions-etc"><i class="fa fa-check"></i><b>7.2</b> R functions etc</a></li>
+<li class="chapter" data-level="7.3" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html#a-brief-introduction-to-r"><i class="fa fa-check"></i><b>7.3</b> A brief introduction to R</a></li>
+<li class="chapter" data-level="7.4" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html#links-and-further-reading"><i class="fa fa-check"></i><b>7.4</b> Links and Further Reading</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html"><i class="fa fa-check"></i><b>8</b> Introduction to NCBI databases</a><ul>
+<li class="chapter" data-level="8.1" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#to-do"><i class="fa fa-check"></i><b>8.1</b> To do</a></li>
+<li class="chapter" data-level="8.2" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#the-ncbi-sequence-database"><i class="fa fa-check"></i><b>8.2</b> The NCBI Sequence Database</a></li>
+<li class="chapter" data-level="8.3" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#the-ncbi-sub-databases"><i class="fa fa-check"></i><b>8.3</b> The NCBI Sub-Databases</a></li>
+<li class="chapter" data-level="8.4" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#searching-for-an-accession-number-in-the-ncbi-database"><i class="fa fa-check"></i><b>8.4</b> Searching for an accession number in the NCBI database</a></li>
+<li class="chapter" data-level="8.5" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#ncbi-sequence-format-ncbi-format"><i class="fa fa-check"></i><b>8.5</b> NCBI Sequence Format (NCBI Format)</a></li>
+<li class="chapter" data-level="8.6" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#refseq"><i class="fa fa-check"></i><b>8.6</b> RefSeq</a></li>
+<li class="chapter" data-level="8.7" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#querying-the-ncbi-database"><i class="fa fa-check"></i><b>8.7</b> Querying the NCBI Database</a></li>
+<li class="chapter" data-level="8.8" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#querying-the-ncbi-database-via-the-ncbi-website-for-reference"><i class="fa fa-check"></i><b>8.8</b> Querying the NCBI Database via the NCBI Website (for reference)</a></li>
+<li class="chapter" data-level="8.9" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#example-finding-the-sequences-published-in-nature-460352-358-for-reference"><i class="fa fa-check"></i><b>8.9</b> Example: finding the sequences published in Nature 460:352-358 (for reference)</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="downloading-ncbi-sequence-data-by-hand.html"><a href="downloading-ncbi-sequence-data-by-hand.html"><i class="fa fa-check"></i><b>9</b> Downloading NCBI sequence data by hand</a><ul>
+<li class="chapter" data-level="9.1" data-path="downloading-ncbi-sequence-data-by-hand.html"><a href="downloading-ncbi-sequence-data-by-hand.html#retrieving-genome-sequence-data-via-the-ncbi-website"><i class="fa fa-check"></i><b>9.1</b> Retrieving genome sequence data via the NCBI website</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html"><i class="fa fa-check"></i><b>10</b> Downloading sequences from UniProt by hand</a><ul>
+<li class="chapter" data-level="10.1" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#vocab"><i class="fa fa-check"></i><b>10.1</b> Vocab</a></li>
+<li class="chapter" data-level="10.2" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#uniprot"><i class="fa fa-check"></i><b>10.2</b> UniProt</a></li>
+<li class="chapter" data-level="10.3" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#viewing-the-uniprot-webpage-for-a-protein-sequence"><i class="fa fa-check"></i><b>10.3</b> Viewing the UniProt webpage for a protein sequence</a><ul>
+<li class="chapter" data-level="10.3.1" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#protein-function"><i class="fa fa-check"></i><b>10.3.1</b> Protein function</a></li>
+<li class="chapter" data-level="10.3.2" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#protein-sequence-and-size"><i class="fa fa-check"></i><b>10.3.2</b> Protein sequence and size</a></li>
+<li class="chapter" data-level="10.3.3" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#other-information"><i class="fa fa-check"></i><b>10.3.3</b> Other information</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#retrieving-a-uniprot-protein-sequence-via-the-uniprot-website"><i class="fa fa-check"></i><b>10.4</b> Retrieving a UniProt protein sequence via the UniProt website</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="sequence-databases.html"><a href="sequence-databases.html"><i class="fa fa-check"></i><b>11</b> Sequence Databases</a><ul>
+<li class="chapter" data-level="11.1" data-path="sequence-databases.html"><a href="sequence-databases.html#querying-the-ncbi-database-via-r"><i class="fa fa-check"></i><b>11.1</b> Querying the NCBI Database via R</a></li>
+<li class="chapter" data-level="11.2" data-path="sequence-databases.html"><a href="sequence-databases.html#summary"><i class="fa fa-check"></i><b>11.2</b> Summary</a></li>
+<li class="chapter" data-level="11.3" data-path="sequence-databases.html"><a href="sequence-databases.html#acknowledgements"><i class="fa fa-check"></i><b>11.3</b> Acknowledgements</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html"><i class="fa fa-check"></i><b>12</b> Local variation in GC content - NOT UPDATED</a><ul>
+<li class="chapter" data-level="12.0.1" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#note-on-the-biology-in-this-section"><i class="fa fa-check"></i><b>12.0.1</b> Note on the biology in this section</a></li>
+<li class="chapter" data-level="12.1" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#vocabulary-1"><i class="fa fa-check"></i><b>12.1</b> Vocabulary</a></li>
+<li class="chapter" data-level="12.2" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#reading-sequence-data-with-rentrezentrez_fetch"><i class="fa fa-check"></i><b>12.2</b> Reading sequence data with rentrez::entrez_fetch</a></li>
+<li class="chapter" data-level="12.3" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#local-variation-in-gc-content"><i class="fa fa-check"></i><b>12.3</b> Local variation in GC content</a></li>
+<li class="chapter" data-level="12.4" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#acknowledgements-1"><i class="fa fa-check"></i><b>12.4</b> Acknowledgements</a><ul>
+<li class="chapter" data-level="12.4.1" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#license"><i class="fa fa-check"></i><b>12.4.1</b> License</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#exercises"><i class="fa fa-check"></i><b>12.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="alignments-in-r-not-updayed.html"><a href="alignments-in-r-not-updayed.html"><i class="fa fa-check"></i><b>13</b> Alignments in R - NOT UPDAYED</a><ul>
+<li class="chapter" data-level="13.1" data-path="alignments-in-r-not-updayed.html"><a href="alignments-in-r-not-updayed.html#retrieving-a-uniprot-protein-sequence-using-seqinr"><i class="fa fa-check"></i><b>13.1</b> Retrieving a UniProt protein sequence using SeqinR</a></li>
+<li class="chapter" data-level="13.2" data-path="alignments-in-r-not-updayed.html"><a href="alignments-in-r-not-updayed.html#comparing-two-sequences-using-a-dotplot"><i class="fa fa-check"></i><b>13.2</b> Comparing two sequences using a dotplot</a></li>
+<li class="chapter" data-level="13.3" data-path="alignments-in-r-not-updayed.html"><a href="alignments-in-r-not-updayed.html#aligning-uniprot-sequences"><i class="fa fa-check"></i><b>13.3</b> Aligning UniProt sequences</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Computational Biology for All</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="alignments-in-r---not-updayed" class="section level1">
+<h1><span class="header-section-number">Chapter 13</span> Alignments in R - NOT UPDAYED</h1>
+<div id="retrieving-a-uniprot-protein-sequence-using-seqinr" class="section level2">
+<h2><span class="header-section-number">13.1</span> Retrieving a UniProt protein sequence using SeqinR</h2>
+<p>An alternative method of retrieving a UniProt protein sequence is to use the SeqinR package to query the ACNUC sub-database “swissprot”, which contains protein sequences from UniProt.</p>
+<p>We use the query() function from SeqinR to query this database, as described in chapter3.</p>
+<p>For example to retrieve the protein sequences for UniProt accessions Q9CD83 and A0PQ23, we type in R:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="alignments-in-r-not-updayed.html#cb1-1"></a><span class="kw">library</span>(<span class="st">&quot;seqinr&quot;</span>)</span>
+<span id="cb1-2"><a href="alignments-in-r-not-updayed.html#cb1-2"></a><span class="kw">choosebank</span>(<span class="st">&quot;swissprot&quot;</span>)</span>
+<span id="cb1-3"><a href="alignments-in-r-not-updayed.html#cb1-3"></a><span class="kw">query</span>(<span class="st">&quot;leprae&quot;</span>, <span class="st">&quot;AC=Q9CD83&quot;</span>)</span>
+<span id="cb1-4"><a href="alignments-in-r-not-updayed.html#cb1-4"></a>lepraeseq &lt;-<span class="st"> </span><span class="kw">getSequence</span>(leprae<span class="op">$</span>req[[<span class="dv">1</span>]])</span>
+<span id="cb1-5"><a href="alignments-in-r-not-updayed.html#cb1-5"></a><span class="kw">query</span>(<span class="st">&quot;ulcerans&quot;</span>, <span class="st">&quot;AC=A0PQ23&quot;</span>)</span>
+<span id="cb1-6"><a href="alignments-in-r-not-updayed.html#cb1-6"></a>ulceransseq &lt;-<span class="st"> </span><span class="kw">getSequence</span>(ulcerans<span class="op">$</span>req[[<span class="dv">1</span>]])</span>
+<span id="cb1-7"><a href="alignments-in-r-not-updayed.html#cb1-7"></a><span class="kw">closebank</span>()</span></code></pre></div>
+<p>Display the contents of “lepraeseq”</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="alignments-in-r-not-updayed.html#cb2-1"></a>lepraeseq</span></code></pre></div>
+</div>
+<div id="comparing-two-sequences-using-a-dotplot" class="section level2">
+<h2><span class="header-section-number">13.2</span> Comparing two sequences using a dotplot</h2>
+<p>As a first step in comparing two protein, RNA or DNA sequences, it is a good idea to make a dotplot. A dotplot is a graphical method that allows the comparison of two protein or DNA sequences and identify regions of close similarity between them. A dotplot is essentially a two-dimensional matrix (like a grid), which has the sequences of the proteins being compared along the vertical and horizontal axes.</p>
+<p>In order to make a simple dotplot to represent of the similarity between two sequences, individual cells in the matrix can be shaded black if residues are identical, so that matching sequence segments appear as runs of diagonal lines across the matrix. Identical proteins will have a line exactly on the main diagonal of the dotplot, that spans across the whole matrix.</p>
+<p>For proteins that are not identical, but share regions of similarity, the dotplot will have shorter lines that may be on the main diagonal, or off the main diagonal of the matrix. In essence, a dotplot will reveal if there are any regions that are clearly very similar in two protein (or DNA) sequences.</p>
+<p>We can create a dotplot for two sequences using the “dotPlot()” function in the SeqinR R package.</p>
+<p>For example, if we want to create a dotplot of the sequences for the chorismate lyase proteins from Mycobacterium leprae and Mycobacterium ulcerans, we would type:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="alignments-in-r-not-updayed.html#cb3-1"></a><span class="kw">dotPlot</span>(lepraeseq, ulceransseq)</span></code></pre></div>
+<p>image5</p>
+<p>In the dotplot above, the M. leprae sequence is plotted along the x-axis (horizontal axis), and the M. ulcerans sequence is plotted along the y-axis (vertical axis). The dotplot displays a dot at points where there is an identical amino acid in the two sequences.</p>
+<p>For example, if amino acid 53 in the M. leprae sequence is the same amino acid (eg. “W”) as amino acid 70 in the M. ulcerans sequence, then the dotplot will show a dot the position in the plot where x =50 and y =53.</p>
+<p>In this case you can see a lot of dots along a diagonal line, which indicates that the two protein sequences contain many identical amino acids at the same (or very similar) positions along their lengths. This is what you would expect, because we know that these two proteins are homologues (related proteins).</p>
+<p>Pairwise global alignment of DNA sequences using the Needleman-Wunsch algorithm
+If you are studying a particular pair of genes or proteins, an important question is to what extent the two sequences are similar.</p>
+<p>To quantify similarity, it is necessary to align the two sequences, and then you can calculate a similarity score based on the alignment.</p>
+<p>There are two types of alignment in general. A global alignment is an alignment of the full length of two sequences, for example, of two protein sequences or of two DNA sequences. A local alignment is an alignment of part of one sequence to part of another sequence.</p>
+<p>The first step in computing a alignment (global or local) is to decide on a scoring system. For example, we may decide to give a score of +2 to a match and a penalty of -1 to a mismatch, and a penalty of -2 to a gap. Thus, for the alignment:</p>
+<p>G A A T T C
+G A T T - A
+we would compute a score of 2 + 2 -1 + 2 -2 - 1 = 2.</p>
+<p>Similarly, the score for the following alignment is 2 + 2 -2 + 2 + 2 -1 = 5:</p>
+<p>G A A T T C
+G A - T T A
+The scoring system above can be represented by a scoring matrix (also known as a substitution matrix). The scoring matrix has one row and one column for each possible letter in our alphabet of letters (eg. 4 rows and 4 columns for DNA sequences). The (i,j) element of the matrix has a value of +2 in case of a match and -1 in case of a mismatch.</p>
+<p>We can make a scoring matrix in R by using the nucleotideSubstitutionMatrix() function in the Biostrings() package. The Biostrings package is part of a set of R packages for bioinformatics analysis known as Bioconductor (www.bioconductor.org/).</p>
+<p>To use the Biostrings package, you will first need to install the package (see the instructions here).</p>
+<p>The arguments (inputs) for the nucleotideSubstitutionMatrix() function are the score that we want to assign to a match and the score that we want to assign to a mismatch. We can also specify that we want to use only the four letters representing the four nucleotides (ie. A, C, G, T) by setting ‘baseOnly=TRUE’, or whether we also want to use the letters that represent ambiguous cases where we are not sure what the nucleotide is (eg. ‘N’ = A/C/G/T).</p>
+<p>To make a scoring matrix which assigns a score of +2 to a match and -1 to a mismatch, and store it in the variable sigma, we type:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="alignments-in-r-not-updayed.html#cb4-1"></a><span class="kw">dotPlot</span>(lepraeseq, ulceransseq)</span></code></pre></div>
+<p>Instead of assigning the same penalty (eg. -8) to every gap position, it is common instead to assign a gap opening penalty to the first position in a gap (eg. -8), and a smaller gap extension penalty to every subsequent position in the same gap.</p>
+<p>The reason for doing this is that it is likely that adjacent gap positions were created by the same insertion or deletion event, rather than by several independent insertion or deletion events. Therefore, we don’t want to penalise a 3-letter gap as much as we would penalise three separate 1-letter gaps, as the 3-letter gap may have arisen due to just one insertion or deletion event, while the 3 separate 1-letter gaps probably arose due to three independent insertion or deletion events.</p>
+<p>For example, if we want to compute the score for a global alignment of two short DNA sequences ‘GAATTC’ and ‘GATTA’, we can use the Needleman-Wunsch algorithm to calculate the highest-scoring alignment using a particular scoring function.</p>
+<p>The “pairwiseAlignment()” function in the Biostrings R package finds the score for the optimal global alignment between two sequences using the Needleman-Wunsch algorithm, given a particular scoring system.</p>
+<p>As arguments (inputs), the pairwiseAlignment() function takes the two sequences that you want to align, the scoring matrix, the gap opening penalty, and the gap extension penalty. You can also tell the function that you want to just have the optimal global alignment’s score by setting “scoreOnly = TRUE”, or that you want to have both the optimal global alignment and its score by setting “scoreOnly = FALSE”.</p>
+<p>For example, to find the score for the optimal global alignment between the sequences ‘GAATTC’ and ‘GATTA’, we type:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="alignments-in-r-not-updayed.html#cb5-1"></a>s1 &lt;-<span class="st"> &quot;GAATTC&quot;</span></span>
+<span id="cb5-2"><a href="alignments-in-r-not-updayed.html#cb5-2"></a>s2 &lt;-<span class="st"> &quot;GATTA&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="alignments-in-r-not-updayed.html#cb6-1"></a>globalAligns1s2 &lt;-<span class="st"> </span><span class="kw">pairwiseAlignment</span>(s1, s2, <span class="dt">substitutionMatrix =</span> sigma, <span class="dt">gapOpening =</span> <span class="dv">-2</span>,</span>
+<span id="cb6-2"><a href="alignments-in-r-not-updayed.html#cb6-2"></a><span class="dt">gapExtension =</span> <span class="dv">-8</span>, <span class="dt">scoreOnly =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="alignments-in-r-not-updayed.html#cb7-1"></a>globalAligns1s2 <span class="co"># Print out the optimal alignment and its score</span></span></code></pre></div>
+<p>The above commands print out the optimal global alignment for the two sequences and its score.</p>
+<p>Note that we set “gapOpening” to be -2 and “gapExtension” to be -8, which means that the first position of a gap is assigned a score of (-8-2=)-10, and every subsequent position in a gap is given a score of -8. Here the alignment contains four matches, one mismatch, and one gap of length 1, so its score is (4<em>2)+(1</em>-1)+(1*-10) = -3.</p>
+<p>Pairwise global alignment of protein sequences using the Needleman-Wunsch algorithm
+As well as DNA alignments, it is also possible to make alignments of protein sequences. In this case it is necessary to use a scoring matrix for amino acids rather than for nucleotides.</p>
+<p>There are several well known scoring matrices that come with R, such as the BLOSUM series of matrices. Different BLOSUM matrices exist, named with different numbers. BLOSUM with high numbers are designed for comparing closely related sequences, while BLOSUM with low numbers are designed for comparing distantly related sequences. For example, BLOSUM62 is used for less divergent alignments (alignments of sequences that differ little), and BLOSUM30 is used for more divergent alignments (alignments of sequences that differ a lot).</p>
+<p>Many R packages come with example data sets or data files. The “data()” function is used to load these data files. You can use the data() function in R to load a data set of BLOSUM matrices that comes with R Biostrings() package.</p>
+<p>To load the BLOSUM50 matrix, we type:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="alignments-in-r-not-updayed.html#cb8-1"></a><span class="kw">data</span>(BLOSUM50)</span>
+<span id="cb8-2"><a href="alignments-in-r-not-updayed.html#cb8-2"></a>BLOSUM50 <span class="co"># Print out the data</span></span></code></pre></div>
+<p>You can get a list of the available scoring matrices that come with the Biostrings package by using the data() function, which takes as an argument the name of the package for which you want to know the data sets that come with it:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="alignments-in-r-not-updayed.html#cb9-1"></a><span class="kw">data</span>(<span class="dt">package=</span><span class="st">&quot;Biostrings&quot;</span>)</span></code></pre></div>
+<p>To find the optimal global alignment between the protein sequences “PAWHEAE” and “HEAGAWGHEE” using the Needleman-Wunsch algorithm using the BLOSUM50 matrix, we type:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="alignments-in-r-not-updayed.html#cb10-1"></a><span class="kw">data</span>(BLOSUM50)</span>
+<span id="cb10-2"><a href="alignments-in-r-not-updayed.html#cb10-2"></a>s3 &lt;-<span class="st"> &quot;PAWHEAE&quot;</span></span>
+<span id="cb10-3"><a href="alignments-in-r-not-updayed.html#cb10-3"></a>s4 &lt;-<span class="st"> &quot;HEAGAWGHEE&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="alignments-in-r-not-updayed.html#cb11-1"></a>globalAligns3s4 &lt;-<span class="st"> </span><span class="kw">pairwiseAlignment</span>(s3, s4, <span class="dt">substitutionMatrix =</span> <span class="st">&quot;BLOSUM50&quot;</span>, <span class="dt">gapOpening =</span> <span class="dv">-2</span>,</span>
+<span id="cb11-2"><a href="alignments-in-r-not-updayed.html#cb11-2"></a><span class="dt">gapExtension =</span> <span class="dv">-8</span>, <span class="dt">scoreOnly =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="alignments-in-r-not-updayed.html#cb12-1"></a>globalAligns3s4 <span class="co"># Print out the optimal global alignment and its score</span></span></code></pre></div>
+<p>We set “gapOpening” to be -2 and “gapExtension” to be -8, which means that the first position of a gap is assigned a score of (-8-2=)-10, and every subsequent position in a gap is given a score of -8. This means that the gap will be given a score of -10-8-8 = -26.</p>
+</div>
+<div id="aligning-uniprot-sequences" class="section level2">
+<h2><span class="header-section-number">13.3</span> Aligning UniProt sequences</h2>
+<p>We discussed above how you can search for UniProt accessions and retrieve the corresponding protein sequences, either via the UniProt website or using the SeqinR R package.</p>
+<p>In the examples given above, you learned how to retrieve the sequences for the chorismate lyase proteins from Mycobacterium leprae (UniProt Q9CD83) and Mycobacterium ulcerans (UniProt A0PQ23), and read them into R, and store them as vectors lepraeseq and ulceransseq.</p>
+<p>You can align these sequences using pairwiseAlignment() from the Biostrings package.</p>
+<p>As its input, the pairwiseAlignment() function requires that the sequences be in the form of a single string (eg. “ACGTA”), rather than as a vector of characters (eg. a vector with the first element as “A”, the second element as “C”, etc.). Therefore, to align the M. leprae and M. ulcerans chorismate lyase proteins, we first need to convert the vectors lepraeeq and ulceransseq into strings. We can do this using the c2s() function in the SeqinR package:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="alignments-in-r-not-updayed.html#cb13-1"></a>lepraeseqstring &lt;-<span class="st"> </span><span class="kw">c2s</span>(lepraeseq)     <span class="co"># Make a string that contains the sequence in &quot;lepraeseq&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="alignments-in-r-not-updayed.html#cb14-1"></a>ulceransseqstring &lt;-<span class="st"> </span><span class="kw">c2s</span>(ulceransseq) <span class="co"># Make a string that contains the sequence in &quot;ulceransseq&quot;</span></span></code></pre></div>
+<p>Furthermore, pairwiseAlignment() requires that the sequences be stored as uppercase characters. Therefore, if they are not already in uppercase, we need to use the toupper() function to convert lepraeseqstring and ulceransseqstring to uppercase:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="alignments-in-r-not-updayed.html#cb15-1"></a>lepraeseqstring &lt;-<span class="st"> </span><span class="kw">toupper</span>(lepraeseqstring)</span>
+<span id="cb15-2"><a href="alignments-in-r-not-updayed.html#cb15-2"></a>ulceransseqstring &lt;-<span class="st"> </span><span class="kw">toupper</span>(ulceransseqstring)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="alignments-in-r-not-updayed.html#cb16-1"></a>lepraeseqstring <span class="co"># Print out the content of &quot;lepraeseqstring&quot;</span></span></code></pre></div>
+<p>We can now align the the <em>M. leprae</em> and <em>M. ulcerans</em> chorismate lyase protein sequences using the pairwiseAlignment() function:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="alignments-in-r-not-updayed.html#cb17-1"></a>globalAlignLepraeUlcerans &lt;-<span class="st"> </span><span class="kw">pairwiseAlignment</span>(lepraeseqstring, ulceransseqstring,</span>
+<span id="cb17-2"><a href="alignments-in-r-not-updayed.html#cb17-2"></a>  <span class="dt">substitutionMatrix =</span> BLOSUM50, <span class="dt">gapOpening =</span> <span class="dv">-2</span>, <span class="dt">gapExtension =</span> <span class="dv">-8</span>, <span class="dt">scoreOnly =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="alignments-in-r-not-updayed.html#cb18-1"></a>globalAlignLepraeUlcerans <span class="co"># Print out the optimal global alignment and its score</span></span></code></pre></div>
+<p>As the alignment is very long, when you type globalAlignLepraeUlcerans, you only see the start and the end of the alignment (see above). Therefore, we need to have a function to print out the whole alignment (see below).</p>
+<p>Viewing a long pairwise alignment
+If you want to view a long pairwise alignment such as that between the M. leprae and M. ulerans chorismate lyase proteins, it is convenient to print out the alignment in blocks.</p>
+<p>The R function “printPairwiseAlignment()” below will do this for you:</p>
+<p>To use this function you first need to copy and paste this function into R. You can then use our function printPairwiseAlignment() to print out the alignment between the M. leprae and M. ulcerans chorismate lyase proteins (we stored this alignment in the globalAlignLepraeUlcerans variable, see above), in blocks of 60 alignment columns:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="alignments-in-r-not-updayed.html#cb19-1"></a><span class="kw">printPairwiseAlignment</span>(globalAlignLepraeUlcerans, <span class="dv">60</span>)</span></code></pre></div>
+<p>The position in the protein of the amino acid that is at the end of each line of the printed alignment is shown after the end of the line. For example, the first line of the alignment above finishes at amino acid position 50 in the M. leprae protein and also at amino acid position 60 in the M. ulcerans protein.</p>
+<p>Since we are printing out an alignment that contained gaps in the first 60 alignment columns, the first 60 alignment columns ends before the 60th amino acid in the M. leprae sequence.</p>
+<p>Pairwise local alignment of protein sequences using the Smith-Waterman algorithm
+You can use the pairwiseAlignment() function to find the optimal local alignment of two sequences, that is the best alignment of parts (subsequences) of those sequences, by using the “type=local” argument in pairwiseAlignment(). This uses the Smith-Waterman algorithm for local alignment, the classic bioinformatics algorithm for finding optimal local alignments.</p>
+<p>For example, to find the best local alignment between the M. leprae and M. ulcerans chorismate lyase proteins, we can type:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="alignments-in-r-not-updayed.html#cb20-1"></a>localAlignLepraeUlcerans &lt;-<span class="st"> </span><span class="kw">pairwiseAlignment</span>(lepraeseqstring, ulceransseqstring,</span>
+<span id="cb20-2"><a href="alignments-in-r-not-updayed.html#cb20-2"></a>  <span class="dt">substitutionMatrix =</span> BLOSUM50, <span class="dt">gapOpening =</span> <span class="dv">-2</span>, <span class="dt">gapExtension =</span> <span class="dv">-8</span>, <span class="dt">scoreOnly =</span> <span class="ot">FALSE</span>, <span class="dt">type=</span><span class="st">&quot;local&quot;</span>)</span></code></pre></div>
+<p>Print out the optimal local alignment and its score</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="alignments-in-r-not-updayed.html#cb21-1"></a>localAlignLepraeUlcerans </span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="alignments-in-r-not-updayed.html#cb22-1"></a><span class="kw">printPairwiseAlignment</span>(localAlignLepraeUlcerans, <span class="dv">60</span>)</span></code></pre></div>
+<p>We see that the optimal local alignment is quite similar to the optimal global alignment in this case, except that it excludes a short region of poorly aligned sequence at the start and at the ends of the two proteins.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="local-variation-in-gc-content-not-updated.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["compbio4all.pdf", "compbio4all.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
