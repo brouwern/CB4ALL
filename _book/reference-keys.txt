@@ -1,12 +1,12 @@
-prerequisites
+boilerplate
+introduction
+changes-made-to-original-source
 downloading-r
 introduction-to-r
 installing-r
 installing-r-on-a-windows-pc
 how-to-install-r-on-non-windows-computers-eg.-macintosh-or-linux-computers
 starting-r
-introduction
-changes-made-to-original-source
 downloading-rstudio
 installing-rstudio
 getting-to-know-rstudio
@@ -55,9 +55,7 @@ local-variation-in-gc-content
 acknowledgements-1
 license
 exercises
-alignments-in-r---not-updated
+alignments-in-r---not-updayed
 retrieving-a-uniprot-protein-sequence-using-seqinr
 comparing-two-sequences-using-a-dotplot
 aligning-uniprot-sequences
-boilerplate
-alignments-in-r---not-updayed

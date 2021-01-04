@@ -1,11 +1,12 @@
 # Alignments in R - NOT UPDAYED
 
-```{r  include = FALSE}
+By: Avril Coghlan, adapted by Nathan Brouwer
+
+```{r include = FALSE}
 knitr::opts_chunk$set(
   eval = FALSE    # THIS TUTORIAL HAS NOT BEEN UPDATED!!!!!!!
 )
 ```
-
 
 
 ## Retrieving a UniProt protein sequence using SeqinR

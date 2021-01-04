@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 6 Brief introduction to R | Computational Biology for All</title>
+  <title>Chapter 18 Rooted Neighbor-joing Phylogenetic trees | Computational Biology for All</title>
   <meta name="description" content="A bioinformatics and computational biology book" />
   <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 6 Brief introduction to R | Computational Biology for All" />
+  <meta property="og:title" content="Chapter 18 Rooted Neighbor-joing Phylogenetic trees | Computational Biology for All" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 6 Brief introduction to R | Computational Biology for All" />
+  <meta name="twitter:title" content="Chapter 18 Rooted Neighbor-joing Phylogenetic trees | Computational Biology for All" />
   
   <meta name="twitter:description" content="A bioinformatics and computational biology book" />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="installing-bioconductor.html"/>
-<link rel="next" href="introduction-to-ncbi-databases.html"/>
+<link rel="prev" href="significance-of-orfs.html"/>
+<link rel="next" href="todo.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -261,142 +261,85 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="brief-introduction-to-r" class="section level1">
-<h1><span class="header-section-number">Chapter 6</span> Brief introduction to R</h1>
-<p>This chapter provides a brie introduction to R. At the end of are links to additional resources for getting started with R.</p>
-<div id="vocabulary" class="section level2">
-<h2><span class="header-section-number">6.1</span> Vocabulary</h2>
-<ul>
-<li>scalar</li>
-<li>vector</li>
-<li>list</li>
-<li>class</li>
-<li>numeric</li>
-<li>character</li>
-<li>assignmnet</li>
-<li>elements of an object</li>
-<li>indices</li>
-<li>attributes of an object</li>
-<li>arguement of a function</li>
-</ul>
+<div id="rooted-neighbor-joing-phylogenetic-trees" class="section level1">
+<h1><span class="header-section-number">Chapter 18</span> Rooted Neighbor-joing Phylogenetic trees</h1>
+<p>By: Avril Coghlan, adapted by Nathan Brouwer</p>
+<div id="building-a-rooted-phylogenetic-tree-for-protein-sequences" class="section level2">
+<h2><span class="header-section-number">18.1</span> Building a rooted phylogenetic tree for protein sequences</h2>
+<p>In order to convert the unrooted tree into a rooted tree, we need to add an outgroup sequence. Normally, the outgroup sequence is a sequence that we know from some prior knowledge to be more distantly related to the other sequences under study than they are to each other.</p>
+<p>For example, the protein Fox-1 is involved in determining the sex (gender) of an embryo in the nematode worm Caenorhabditis elegans (UniProt accession Q10572). Related proteins are found in other nematodes, including Caenorhabditis remanei (UniProt E3M2K8), Caenorhabditis briggsae (A8WS01), Loa loa (E1FUV2), and Brugia malayi (UniProt A8NSK3).</p>
+<p>Note that Caenorhabditis elegans is a model organism commonly studied in molecular biology. The nematodes Loa loa, and Brugia malayi are parasitic nematodes that cause filariasis, which is classified by the WHO as a neglected tropical disease.</p>
+<p>The UniProt database contains a distantly related sequence from the fruitfly Drosophila melanogaster (UniProt accession Q9VT99). If we were to build a phylogenetic tree of the nematode worm Fox-1 homologues, the distantly related sequence from fruitfly would probably be a good choice of outgroup, since the protein is from a different animal group (insects) than the nematode worms. Thus, it is likely that the fruitfly protein is more distantly related to all the nematode proteins than they are to each other.</p>
+<p>To retrieve the sequences from UniProt we can use the “retrieveseqs()” function (see above):</p>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="rooted-neighbor-joing-phylogenetic-trees.html#cb160-1"></a>seqnames &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Q10572&quot;</span>,<span class="st">&quot;E3M2K8&quot;</span>,<span class="st">&quot;Q8WS01&quot;</span>,<span class="st">&quot;E1FUV2&quot;</span>,<span class="st">&quot;A8NSK3&quot;</span>,<span class="st">&quot;Q9VT99&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="rooted-neighbor-joing-phylogenetic-trees.html#cb161-1"></a>seqs &lt;-<span class="st"> </span><span class="kw">retrieveseqs</span>(seqnames,<span class="st">&quot;swissprot&quot;</span>)</span></code></pre></div>
+<p>We can then write out the sequences to a FASTA file:</p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="rooted-neighbor-joing-phylogenetic-trees.html#cb162-1"></a><span class="kw">write.fasta</span>(seqs, seqnames, <span class="dt">file=</span><span class="st">&quot;fox1.fasta&quot;</span>)</span></code></pre></div>
+<p>We can then use CLUSTAL to create a PHYLIP-format alignment of the sequences, and store it in the alignment file “fox1.phy”. This picture shows part of the alignment (the alignment is quite long, so not all of it is shown):</p>
+<p>image10</p>
+<p>We can then read the alignment into R:</p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="rooted-neighbor-joing-phylogenetic-trees.html#cb163-1"></a>fox1aln  &lt;-<span class="st"> </span><span class="kw">read.alignment</span>(<span class="dt">file =</span> <span class="st">&quot;fox1.phy&quot;</span>, <span class="dt">format =</span> <span class="st">&quot;phylip&quot;</span>)</span></code></pre></div>
+<p>The next step is to build a phylogenetic tree of the proteins, which again we can do using the neighbour-joining algorithm.</p>
+<p>This time we have an outgroup in our set of sequences, so we can build a rooted tree. The function “rootedNJtree()” can be used to build a rooted tree. It returns the phylogenetic tree, and also makes a picture of the tree:</p>
+<p>The function takes the alignment and the name of the outgroup as its inputs. For example, to use it to make a phylogenetic tree of the C. elegans Fox-1 protein and its homologues, using the fruitfly protein (UniProt Q9VT99) as the outgroup, we type:</p>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="rooted-neighbor-joing-phylogenetic-trees.html#cb164-1"></a>fox1alntree &lt;-<span class="st"> </span><span class="kw">rootedNJtree</span>(fox1aln, <span class="st">&quot;Q9VT99&quot;</span>,<span class="dt">type=</span><span class="st">&quot;protein&quot;</span>)</span></code></pre></div>
+<p>Here we can see that E3M2K8 (C. remanei Fox-1 homologue) and Q10572 (C. elegans Fox-1) have been grouped together with bootstrap 100%, and A8NSK3 (Brugia malayi Fox-1 homologue) and E1FUV2 (Loa loa Fox-1 homologue) have been grouped together with bootstrap 100%. These four proteins have also been grouped together in a larger clade with bootstrap 100%.</p>
+<p>Compared to these four proteins, the Q8WS01 (C. briggsae Fox-1 homologue) and Q9VT99 (fruitfly outgroup) seem to be relatively distantly related.</p>
+<p>As this is a rooted tree, we know the direction that evolutionary time ran. Say we call the ancestor of the four sequences (E3M2K8, Q10572, A8NSK3, E1FUV2) ancestor1, the ancestor of the two sequences (E3M2K8, Q10572) ancestor2, and the ancestor of the two sequences (A8NSK3, E1FUV2) ancestor3.</p>
+<p>Because it is a rooted tree, we know that time ran from left to right along the branches of the tree, so that ancestor1 was the ancestor of ancestor2, and ancestor1 was also the ancestor of ancestor3. In other words, ancestor1 lived before ancestor2 or ancestor3; ancestor2 and ancestor3 were descendants of ancestor1.</p>
+<p>Another way of saying this is that E3M2K8 and Q10572 shared a common ancestor with each other more recently than they did with A8NSK3 and E1FUV2.</p>
+<p>The lengths of branches in this tree are proportional to the amount of evolutionary change (estimated number of mutations) that occurred along the branches. The branches leading back from E3M2K8 and Q10572 to their last common ancestor are slightly longer than the branches leading back from A8NSK3 and E1FUV2 to their last common ancestor.</p>
+<p>This indicates that there has been more evolutionary change in E3M2K8 (C. remanei Fox-1 homologue) and Q10572 (C. elegans Fox-1) proteins since they diverged, than there has been in A8NSK3 (Brugia malayi Fox-1 homologue) and E1FUV2 (Loa loa Fox-1 homologue) since they diverged.</p>
 </div>
-<div id="r-functions-etc" class="section level2">
-<h2><span class="header-section-number">6.2</span> R functions etc</h2>
-<ul>
-<li>&lt;-</li>
-<li>[ ]</li>
-<li>$</li>
-<li>table()</li>
-<li>function</li>
-<li>c()</li>
-<li>log10()</li>
-<li>help(), ?</li>
-<li>help.search()</li>
-<li>RSiteSearch()</li>
-<li>mean()</li>
-<li>return()</li>
-<li>q()</li>
-</ul>
+<div id="building-a-phylogenetic-tree-for-dna-or-mrna-sequences" class="section level2">
+<h2><span class="header-section-number">18.2</span> Building a phylogenetic tree for DNA or mRNA sequences</h2>
+<p>In the example above, a phylogenetic tree was built for protein sequences. The genomes of distantly related organisms such as vertebrates will have accumulated many mutations since they diverged. Sometimes, so many mutations have occurred since the organisms diverged that their DNA sequences are hard to align correctly and it is also hard to accurately estimate evolutionary distances from alignments of those DNA sequences.</p>
+<p>In contrast, as many mutations at the DNA level are synonymous at the protein level, protein sequences diverge at a slower rate than DNA sequences. This is why for reasonably distantly related organisms such as vertebrates, it is usually preferable to use protein sequences for phylogenetic analyses.</p>
+<p>If you are studying closely related organisms such as primates, few mutations will have occurred since they diverged. As a result, if you use protein sequences for a phylogenetic analysis, there may be too few amino acid substitutions to provide enough ‘signal’ to use for the phylogenetic analysis. Therefore, it is often preferable to use DNA sequences for a phylogenetic analysis of closely related organisms such as primates.</p>
+<p>We can use the functions unrootedNJtree() and rootedNJtree() described above to build unrooted or rooted neighbour-joining phylogenetic trees based on an alignment of DNA or mRNA sequences. In this case, we need to use “type=DNA” as an argument in these functions, to tell them that we are making a tree of nucleotide sequences, not protein sequences.</p>
+<p>For example, to build an unrooted phylogenetic tree based on the alignment of the virus phosphoprotein mRNA sequences, we type in R:</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="rooted-neighbor-joing-phylogenetic-trees.html#cb165-1"></a>virusmRNAaln  &lt;-<span class="st"> </span><span class="kw">read.alignment</span>(<span class="dt">file =</span> <span class="st">&quot;virusmRNA.phy&quot;</span>, <span class="dt">format =</span> <span class="st">&quot;phylip&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="rooted-neighbor-joing-phylogenetic-trees.html#cb166-1"></a>virusmRNAalntree &lt;-<span class="st"> </span><span class="kw">unrootedNJtree</span>(virusmRNAaln, <span class="dt">type=</span><span class="st">&quot;DNA&quot;</span>)</span></code></pre></div>
+<p>Saving a phylogenetic tree as a Newick-format tree file
+A commonly used format for representing phylogenetic trees is the Newick format. Once you have built a phylogenetic tree using R, it is convenient to store it as a Newick-format tree file. This can be done using the “write.tree()” function in the Ape R package.</p>
+<p>For example, to save the unrooted phylogenetic tree of virus phosphoprotein mRNA sequences as a Newick-format tree file called “virusmRNA.tre”, we type:</p>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="rooted-neighbor-joing-phylogenetic-trees.html#cb167-1"></a><span class="kw">write.tree</span>(virusmRNAalntree, <span class="st">&quot;virusmRNA.tre&quot;</span>)</span></code></pre></div>
+<p>The Newick-format file “virusmRNA.tre” should now appear in your “My Documents” folder.</p>
 </div>
-<div id="a-brief-introduction-to-r" class="section level2">
-<h2><span class="header-section-number">6.3</span> A brief introduction to R</h2>
-<p>You will type R commands into the RStudio console in order to carry out analyses in R. In the RStudio console you will see the R prompt starting with the symbol “&gt;”. “&gt;” will always be there at the beginning of each new command - don’t try to delete it.</p>
-<p>We type the commands needed for a particular task after this prompt. The command is carried out after you hit the Return key.</p>
-<p>Once you have started R, you can start typing in commands, and the results will be calculated immediately, for example:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="brief-introduction-to-r.html#cb7-1"></a><span class="dv">2</span><span class="op">*</span><span class="dv">3</span></span></code></pre></div>
-<pre><code>## [1] 6</code></pre>
-<p>Note that prior to the output of “6” it shows “[1]”.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="brief-introduction-to-r.html#cb9-1"></a><span class="dv">10-3</span></span></code></pre></div>
-<pre><code>## [1] 7</code></pre>
-<p>Again, prior to the output of “7” it shows “[1]”.</p>
-<p>R can act like a basic calculator that you type command in to. You can also use it like a scientific calcualtor and create <strong>variables</strong> that store information. All variables (scalars, vectors, matrices, etc.) created by R are called objects. In R, we assign values to variables using an arrow. For example, we can assign the value 2*3 to the variable x using the command:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="brief-introduction-to-r.html#cb11-1"></a>x &lt;-<span class="st"> </span><span class="dv">2</span><span class="op">*</span><span class="dv">3</span></span></code></pre></div>
-<p>To view the contents of any R object, just type its name, and the contents of that R object will be displayed:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="brief-introduction-to-r.html#cb12-1"></a>x</span></code></pre></div>
-<pre><code>## [1] 6</code></pre>
-<p>There are several possible different types of objects in R with fancy math names, including scalars, vectors, matrices, arrays, data frames, tables, and lists. The <strong>scalar</strong> variable x above is one example of an R object. While a scalar variable such as x has just one element, a <strong>vector</strong> consists of several elements. The elements in a vector are all of the same <strong>type</strong> (eg. numeric or characters), while <strong>lists</strong> may include elements such as characters as well as numeric quantities.</p>
-<p>To create a vector, we can use the c() (combine) function. For example, to create a vector called myvector that has elements with values 8, 6, 9, 10, and 5, we type:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="brief-introduction-to-r.html#cb14-1"></a>myvector &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">8</span>, <span class="dv">6</span>, <span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">5</span>)</span></code></pre></div>
-<p>To see the contents of the variable myvector, we can just type its name and press enter</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="brief-introduction-to-r.html#cb15-1"></a>myvector</span></code></pre></div>
-<pre><code>## [1]  8  6  9 10  5</code></pre>
-<p>The [1] is the index of the first element in the vector. We can extract any element of the vector by typing the vector name with the index of that element given in square brackets. For example, to get the value of the 4th element in the vector myvector, we type:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="brief-introduction-to-r.html#cb17-1"></a>myvector[<span class="dv">4</span>]</span></code></pre></div>
-<pre><code>## [1] 10</code></pre>
-<p>In contrast to a vector, a <strong>list</strong> can contain elements of different types, for example, both numeric and character elements. A list can also include other variables such as a vector. The list() function is used to create a list. For example, we could create a list mylist by typing:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="brief-introduction-to-r.html#cb19-1"></a>mylist &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">name=</span><span class="st">&quot;Fred&quot;</span>, <span class="dt">wife=</span><span class="st">&quot;Mary&quot;</span>, myvector)</span></code></pre></div>
-<p>We can then print out the contents of the list mylist by typing its name:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="brief-introduction-to-r.html#cb20-1"></a>mylist</span></code></pre></div>
-<pre><code>## $name
-## [1] &quot;Fred&quot;
-## 
-## $wife
-## [1] &quot;Mary&quot;
-## 
-## [[3]]
-## [1]  8  6  9 10  5</code></pre>
-<p>The <strong>elements</strong> in a list are numbered, and can be referred to using <strong>indices</strong>. We can extract an element of a list by typing the list name with the index of the element given in double <strong>square brackets</strong> (in contrast to a vector, where we only use single square brackets). Thus, we can extract the second and third elements from mylist by typing:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="brief-introduction-to-r.html#cb22-1"></a>mylist[<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>)]</span></code></pre></div>
-<pre><code>## $wife
-## [1] &quot;Mary&quot;
-## 
-## [[2]]
-## [1]  8  6  9 10  5</code></pre>
-<p>Elements of lists may also be named, and in this case the elements may be referred to by giving the list name, followed by “<span class="math inline">\(”, followed by the element name. For example, mylist\)</span>name is the same as mylist[[1]] and mylist$wife is the same as mylist[[2]]:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="brief-introduction-to-r.html#cb24-1"></a>mylist<span class="op">$</span>wife</span></code></pre></div>
-<pre><code>## [1] &quot;Mary&quot;</code></pre>
-<p>We can find out the names of the named elements in a list by using the attributes() function, for example:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="brief-introduction-to-r.html#cb26-1"></a><span class="kw">attributes</span>(mylist)</span></code></pre></div>
-<pre><code>## $names
-## [1] &quot;name&quot; &quot;wife&quot; &quot;&quot;</code></pre>
-<p>When you use the attributes() function to find the named elements of a list variable, the named elements are always listed under a heading “<span class="math inline">\(names”. Therefore, we see that the named elements of the list variable mylist are called “name” and “wife”, and we can retrieve their values by typing mylist\)</span>name and mylist$wife, respectively.</p>
-<p>Another type of object that you will encounter in R is a <strong>table</strong>. For example, if we made a vector variable “mynames” containing the names of children in a class, we can use the table() function to produce a table variable that contains the number of children with each possible name:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="brief-introduction-to-r.html#cb28-1"></a>mynames &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Mary&quot;</span>, <span class="st">&quot;John&quot;</span>, <span class="st">&quot;Ann&quot;</span>, <span class="st">&quot;Sinead&quot;</span>, <span class="st">&quot;Joe&quot;</span>, <span class="st">&quot;Mary&quot;</span>, <span class="st">&quot;Jim&quot;</span>, <span class="st">&quot;John&quot;</span>, <span class="st">&quot;Simon&quot;</span>)</span></code></pre></div>
-<p>Now make the table</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="brief-introduction-to-r.html#cb29-1"></a><span class="kw">table</span>(mynames)</span></code></pre></div>
-<pre><code>## mynames
-##    Ann    Jim    Joe   John   Mary  Simon Sinead 
-##      1      1      1      2      2      1      1</code></pre>
-<p>Note that there are two Johns and two Marys.</p>
-<p>We can store the table variable produced by the function table(), and call the stored table “mytable”, by typing:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="brief-introduction-to-r.html#cb31-1"></a>mytable &lt;-<span class="st"> </span><span class="kw">table</span>(mynames)</span></code></pre></div>
-<p>To access elements in a table variable, you need to use double square brackets, just like accessing elements in a list. For example, to access the fourth element in the table mytable (the number of children called “John”), we type:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="brief-introduction-to-r.html#cb32-1"></a>mytable[[<span class="dv">4</span>]]</span></code></pre></div>
-<pre><code>## [1] 2</code></pre>
-<p>Alternatively, you can use the name of the fourth element in the table (“John”) to find the value of that table element:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="brief-introduction-to-r.html#cb34-1"></a>mytable[[<span class="st">&quot;John&quot;</span>]]</span></code></pre></div>
-<pre><code>## [1] 2</code></pre>
-<p>Functions in R usually require arguments, which are input variables (ie. objects) that are passed to them, which they then carry out some operation on. For example, the log10() function is passed a number, and it then calculates the log to the base 10 of that number:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="brief-introduction-to-r.html#cb36-1"></a><span class="kw">log10</span>(<span class="dv">100</span>)</span></code></pre></div>
-<pre><code>## [1] 2</code></pre>
-<p>In R, you can get help about a particular function by using the help() function. For example, if you want help about the log10() function, you can type:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="brief-introduction-to-r.html#cb38-1"></a><span class="kw">help</span>(<span class="st">&quot;log10&quot;</span>)</span></code></pre></div>
-<p>When you use the help() function, a box or webpage will show up in one of the panes of RStudio with information about the function that you asked for help with. You can also use the ? next to the fuctnion</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="brief-introduction-to-r.html#cb39-1"></a>?log10</span></code></pre></div>
-<p>If you are not sure of the name of a function, but think you know part of its name, you can search for the function name using the help.search() and RSiteSearch() functions. The help.search() function searches to see if you already have a function installed (from one of the R packages that you have installed) that may be related to some topic you’re interested in. The RSiteSearch() function searches all R functions (including those in packages that you haven’t yet installed) for functions related to the topic you are interested in.</p>
-<p>For example, if you want to know if there is a function to calculate the standard deviation of a set of numbers, you can search for the names of all installed functions containing the word “deviation” in their description by typing:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="brief-introduction-to-r.html#cb40-1"></a><span class="kw">help.search</span>(<span class="st">&quot;deviation&quot;</span>)</span></code></pre></div>
-<p>Among the functions that were found, is the function sd() in the “stats” package (an R package that comes with the standard R installation), which is used for calculating the standard deviation.</p>
-<p>In the example above, the help.search() function found a relevant function (sd() here). However, if you did not find what you were looking for with help.search(), you could then use the RSiteSearch() function to see if a search of all functions described on the R website may find something relevant to the topic that you’re interested in:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="brief-introduction-to-r.html#cb41-1"></a><span class="kw">RSiteSearch</span>(<span class="st">&quot;deviation&quot;</span>)</span></code></pre></div>
-<p>The results of the RSiteSearch() function will be hits to descriptions of R functions, as well as to R mailing list discussions of those functions.</p>
-<p>We can perform computations with R using objects such as scalars and vectors. For example, to calculate the average of the values in the vector myvector (ie. the average of 8, 6, 9, 10 and 5), we can use the mean() function:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="brief-introduction-to-r.html#cb42-1"></a><span class="kw">mean</span>(myvector)</span></code></pre></div>
-<pre><code>## [1] 7.6</code></pre>
-<p>We have been using built-in R functions such as mean(), length(), print(), plot(), etc. We can also create our own functions in R to do calculations that you want to carry out very often on different input data sets. For example, we can create a function to calculate the value of 20 plus square of some input number:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="brief-introduction-to-r.html#cb44-1"></a>myfunction &lt;-<span class="st"> </span><span class="cf">function</span>(x) { <span class="kw">return</span>(<span class="dv">20</span> <span class="op">+</span><span class="st"> </span>(x<span class="op">*</span>x)) }</span></code></pre></div>
-<p>This function will calculate the square of a number (x), and then add 20 to that value. The return() statement returns the calculated value. Once you have typed in this function, the function is then available for use. For example, we can use the function for different input numbers (eg. 10, 25):</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="brief-introduction-to-r.html#cb45-1"></a><span class="kw">myfunction</span>(<span class="dv">10</span>)</span></code></pre></div>
-<pre><code>## [1] 120</code></pre>
-<p>To quit R, type:</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="brief-introduction-to-r.html#cb47-1"></a><span class="kw">q</span>()</span></code></pre></div>
-</div>
-<div id="links-and-further-reading" class="section level2">
-<h2><span class="header-section-number">6.4</span> Links and Further Reading</h2>
-<p>Some links are included here for further reading.</p>
+<div id="summary-3" class="section level2">
+<h2><span class="header-section-number">18.3</span> Summary</h2>
+<p>In this practical, you have learnt the following R functions that belong to the bioinformatics packages:</p>
+<p>read.alignment() from the SeqinR package for reading in a multiple alignment
+dist.alignment() from the SeqinR package for calculating genetic distances between protein sequences
+dist.dna() from the Ape package for calculating genetic distances between DNA or mRNA sequences
+Links and Further Reading
+Some links are included here for further reading.</p>
+<p>For background reading on phylogenetic trees, it is recommended to read Chapter 7 of Introduction to Computational Genomics: a case studies approach by Cristianini and Hahn (Cambridge University Press; www.computational-genomics.net/book/).</p>
+<p>Another more in-depth (but very accesssible) book on phylogenetics is Molecular Evolution: A Phylogenetic Approach by Roderic DM Page and Edward C Holmes.</p>
+<p>For more in-depth information and more examples on using the SeqinR package for sequence analysis, look at the SeqinR documentation, <a href="http://pbil.univ-lyon1.fr/software/seqinr/doc.php?lang=eng" class="uri">http://pbil.univ-lyon1.fr/software/seqinr/doc.php?lang=eng</a>.</p>
+<p>For more in-depth information and more examples on the Ape package for phylogenetic analysis, look at the Ape documentation, ape.mpl.ird.fr/.</p>
+<p>If you are using the Ape package for a phylogenetic analysis project, it would be worthwhile to obtain a copy of the book Analysis of Phylogenetics and Evolution with R by Emmanuel Paradis, published by Springer, which has many nice examples of using R for phylogenetic analyses.</p>
 <p>For a more in-depth introduction to R, a good online tutorial is available on the “Kickstarting R” website, cran.r-project.org/doc/contrib/Lemon-kickstart.</p>
 <p>There is another nice (slightly more in-depth) tutorial to R available on the “Introduction to R” website, cran.r-project.org/doc/manuals/R-intro.html.</p>
-<p><a href="https://learningstatisticswithr.com/book/introR.html">Chapter 3</a> of Danielle Navarro’s book is an excellent intro to the basics of R.</p>
+<p>Acknowledgements
+Many of the ideas for the examples and exercises for this practical were inspired by the Matlab case study on SARS (www.computational-genomics.net/case_studies/sars_demo.html) from the website that accompanies the book Introduction to Computational Genomics: a case studies approach by Cristianini and Hahn (Cambridge University Press; www.computational-genomics.net/book/).</p>
+<p>Thank you to Jean Lobry and Simon Penel for helpful advice on using the SeqinR package.</p>
+<p>Thank you to Emmanuel Paradis and François Michonneau for help in using the Ape package.</p>
+<p>Thank you also to Klaus Schliep for helpful comments.</p>
+<p>Contact
+I will be grateful if you will send me (Avril Coghlan) corrections or suggestions for improvements to my email address <a href="mailto:alc@sanger.ac.uk" class="email">alc@sanger.ac.uk</a></p>
+<p>License
+The content in this book is licensed under a Creative Commons Attribution 3.0 License.</p>
+<p>Exercises
+Answer the following questions, using the R package. For each question, please record your answer, and what you typed into R to get this answer.</p>
+<p>Model answers to the exercises are given in Answers to the exercises on Multiple Alignment and Phylogenetic Trees.</p>
+<ol style="list-style-type: decimal">
+<li>Calculate the genetic distances between the following NS1 proteins from different Dengue virus strains: Dengue virus 1 NS1 protein (Uniprot Q9YRR4), Dengue virus 2 NS1 protein (UniProt Q9YP96), Dengue virus 3 NS1 protein (UniProt B0LSS3), and Dengue virus 4 NS1 protein (UniProt Q6TFL5). Which are the most closely related proteins, and which are the least closely related, based on the genetic distances?
+Note: Dengue virus causes Dengue fever, which is classified by the WHO as a neglected tropical disease. There are four main types of Dengue virus, Dengue virus 1, Dengue virus 2, Dengue virus 3, and Dengue virus 4.</li>
+<li>Build an unrooted phylogenetic tree of the NS1 proteins from Dengue virus 1, Dengue virus 2, Dengue virus 3 and Dengue virus 4, using the neighbour-joining algorithm. Which are the most closely related proteins, based on the tree? Based on the bootstrap values in the tree, how confident are you of this?</li>
+<li>Build an unrooted phylogenetic tree of the NS1 proteins from Dengue viruses 1-4, based on a filtered alignment of the four proteins (keeping alignment columns in which at least 30% of letters are not gaps, and in which at least 30% of pairs of letters are identical). Does this differ from the tree based on the unfiltered alignment (in Q2)? Can you explain why?</li>
+<li>The Zika virus is related to Dengue viruses, but is not a Dengue virus, and so therefore can be used as an outgroup in phylogenetic trees of Dengue virus sequences. UniProt accession Q32ZE1 consists of a sequence with similarity to the Dengue NS1 protein, so seems to be a related protein from Zika virus. Build a rooted phylogenetic tree of the Dengue NS1 proteins based on a filtered alignment (keeping alignment columns in which at least 30% of letters are not gaps, and in which at least 30% of pairs of letters are identical), using the Zika virus protein as the outgroup. Which are the most closely related Dengue virus proteins, based on the tree? What extra information does this tree tell you, compared to the unrooted tree in Q2?</li>
+</ol>
 
 </div>
 </div>
@@ -405,8 +348,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="installing-bioconductor.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="introduction-to-ncbi-databases.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="significance-of-orfs.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="todo.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

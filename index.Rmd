@@ -10,7 +10,7 @@ link-citations: yes
 description: "A bioinformatics and computational biology book"
 ---
 
-# Boilerplate
+# Preface {-}
 
 This book is based Dr. Avril Coghlan's [*A little book of R for bioinformatics.*](https://a-little-book-of-r-for-bioinformatics.readthedocs.io/en/latest/index.html).  Much of the text and code was originally written by Dr. Coghlan and distributed under the [Creative Commons 3.0](https://creativecommons.org/licenses/by/3.0/us/) license. 
 

@@ -131,7 +131,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">A Minimal Book Example</a></li>
+<li><a href="./">Computational Biology for All</a></li>
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Boilerplate</a></li>
@@ -212,7 +212,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+<li><a href="https://https://github.com/brouwern/CB4ALL" target="blank">Published with bookdown</a></li>
 
 </ul>
 
@@ -237,8 +237,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>TODO</strong></p>
 <p>need fasta clearn function put into biodata</p>
 <p>Preliminaries</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="local-variation-in-gc-content-not-updated.html#cb1-1"></a><span class="kw">library</span>(rentrez)</span>
-<span id="cb1-2"><a href="local-variation-in-gc-content-not-updated.html#cb1-2"></a><span class="kw">library</span>(seqinr)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="local-variation-in-gc-content-not-updated.html#cb53-1"></a><span class="kw">library</span>(rentrez)</span>
+<span id="cb53-2"><a href="local-variation-in-gc-content-not-updated.html#cb53-2"></a><span class="kw">library</span>(seqinr)</span></code></pre></div>
 <div id="note-on-the-biology-in-this-section" class="section level3">
 <h3><span class="header-section-number">12.0.1</span> Note on the biology in this section</h3>
 <p>Some of the biology in this tutorial appears to be out of date. For example, using variation in GC content to ID horizontal gene transfer is currently considered to be biased. The examples are still good for practicing R skills.</p>
@@ -253,22 +253,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">12.2</span> Reading sequence data with rentrez::entrez_fetch</h2>
 <p>In a previous section you learned how to use to search for and download the sequence data for a given NCBI accession from the NCBI Sequence Database, either via the NCBI website using entrez_fetch() from the rentrez package.</p>
 <p>For example, you could have downloaded the sequence data for a the DEN-1 Dengue virus sequence (NCBI accession NC_001477), and stored it on a file on your computer (eg. “dengue_fasta.fasta”).</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="local-variation-in-gc-content-not-updated.html#cb2-1"></a>dengueseq_fasta &lt;-<span class="st"> </span><span class="kw">entrez_fetch</span>(<span class="dt">db =</span> <span class="st">&quot;nucleotide&quot;</span>, </span>
-<span id="cb2-2"><a href="local-variation-in-gc-content-not-updated.html#cb2-2"></a>                          <span class="dt">id =</span> <span class="st">&quot;NC_001477&quot;</span>, </span>
-<span id="cb2-3"><a href="local-variation-in-gc-content-not-updated.html#cb2-3"></a>                          <span class="dt">rettype =</span> <span class="st">&quot;fasta&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="local-variation-in-gc-content-not-updated.html#cb54-1"></a>dengueseq_fasta &lt;-<span class="st"> </span><span class="kw">entrez_fetch</span>(<span class="dt">db =</span> <span class="st">&quot;nucleotide&quot;</span>, </span>
+<span id="cb54-2"><a href="local-variation-in-gc-content-not-updated.html#cb54-2"></a>                          <span class="dt">id =</span> <span class="st">&quot;NC_001477&quot;</span>, </span>
+<span id="cb54-3"><a href="local-variation-in-gc-content-not-updated.html#cb54-3"></a>                          <span class="dt">rettype =</span> <span class="st">&quot;fasta&quot;</span>)</span></code></pre></div>
 <p>As noted before, the file gets downloaded in FASTA format, which isn’t directly useable in R</p>
 <p>We can convert our FASTA object into a vector using the function fasta_cleaner()</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="local-variation-in-gc-content-not-updated.html#cb3-1"></a>header. &lt;-<span class="st"> &quot;&gt;NC_001477.1 Dengue virus 1, complete genome&quot;</span></span>
-<span id="cb3-2"><a href="local-variation-in-gc-content-not-updated.html#cb3-2"></a>dengueseq_vector &lt;-<span class="st"> </span><span class="kw">fasta_cleaner</span>(dengueseq_fasta)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="local-variation-in-gc-content-not-updated.html#cb55-1"></a>header. &lt;-<span class="st"> &quot;&gt;NC_001477.1 Dengue virus 1, complete genome&quot;</span></span>
+<span id="cb55-2"><a href="local-variation-in-gc-content-not-updated.html#cb55-2"></a>dengueseq_vector &lt;-<span class="st"> </span><span class="kw">fasta_cleaner</span>(dengueseq_fasta)</span></code></pre></div>
 <p>Once you have retrieved a sequence from the NCBI Sequence Database and stored it in a vector variable such as dengueseq_vector in the example above, it is possible to extract <strong>subsequence</strong> of the sequence by typing the name of the vector (eg. dengueseq_vector) followed by the square brackets containing the indices for those nucleotides. For example, to obtain nucleotides 452-535 of the DEN-1 Dengue virus genome, we can type:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="local-variation-in-gc-content-not-updated.html#cb4-1"></a>dengueseq_vector[<span class="dv">452</span><span class="op">:</span><span class="dv">535</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="local-variation-in-gc-content-not-updated.html#cb56-1"></a>dengueseq_vector[<span class="dv">452</span><span class="op">:</span><span class="dv">535</span>]</span></code></pre></div>
 </div>
 <div id="local-variation-in-gc-content" class="section level2">
 <h2><span class="header-section-number">12.3</span> Local variation in GC content</h2>
 <p>In a previous section, you learned that to find out the <a href="https://en.wikipedia.org/wiki/GC-content"><strong>GC content</strong></a> of a genome sequence (percentage of nucleotides in a genome sequence that are Gs or Cs), you can use the GC() function in the SeqinR package. For example, to find the GC content of the DEN-1 Dengue virus sequence that we have stored in the vector dengueseq, we can type:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="local-variation-in-gc-content-not-updated.html#cb5-1"></a><span class="kw">GC</span>(dengueseq_vector)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="local-variation-in-gc-content-not-updated.html#cb57-1"></a><span class="kw">GC</span>(dengueseq_vector)</span></code></pre></div>
 <p>The output of the GC() is the fraction of nucleotides in a sequence that are Gs or Cs, so to convert it to a percentage we need to multiply by 100.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="local-variation-in-gc-content-not-updated.html#cb6-1"></a><span class="kw">GC</span>(dengueseq_vector)<span class="op">*</span><span class="dv">100</span></span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="local-variation-in-gc-content-not-updated.html#cb58-1"></a><span class="kw">GC</span>(dengueseq_vector)<span class="op">*</span><span class="dv">100</span></span></code></pre></div>
 <p>Thus, the GC content of the DEN-1 Dengue virus genome is about 0.467 or 46.7%.</p>
 <p>Although the GC content of the whole DEN-1 Dengue virus genome sequence is about 46.7%, there is probably <strong>local variation</strong> in GC content within the genome. That is, some regions of the genome sequence may have GC contents quite a bit higher than 46.7%, while some regions of the genome sequence may have GC contents that are quite a big lower than 46.7%. Local fluctuations in GC content within the genome sequence can provide different interesting information, for example, they may reveal cases of <a href="en.wikipedia.org/wiki/Horizontal_gene_transfer"><strong>horizontal transfer</strong></a> or reveal biases in mutation.</p>
 <p>If a chunk of DNA has moved by horizontal transfer from the genome of a species with low GC content to a species with high GC content, the chunk of horizontally transferred DNA could be detected as a region of unusually low GC content in the high-GC recipient genome.</p>
@@ -455,6 +455,20 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

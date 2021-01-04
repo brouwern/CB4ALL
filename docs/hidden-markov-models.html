@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 14 Hidden Markov Models | Computational Biology for All</title>
+  <meta name="description" content="A bioinformatics and computational biology book" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 14 Hidden Markov Models | Computational Biology for All" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="A bioinformatics and computational biology book" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 14 Hidden Markov Models | Computational Biology for All" />
+  
+  <meta name="twitter:description" content="A bioinformatics and computational biology book" />
+  
+
+<meta name="author" content="Avril Coglan and Nathan Brouwer" />
+
+
+<meta name="date" content="2021-01-04" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="comparative-genomics.html"/>
+<link rel="next" href="multiple-alignment-with-clustal.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Computational Biology for All</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="introduction.html"><a href="introduction.html#changes-made-to-original-source"><i class="fa fa-check"></i><b>1.1</b> Changes made to original source</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="downloading-r.html"><a href="downloading-r.html"><i class="fa fa-check"></i><b>2</b> Downloading R</a><ul>
+<li class="chapter" data-level="2.1" data-path="downloading-r.html"><a href="downloading-r.html#introduction-to-r"><i class="fa fa-check"></i><b>2.1</b> Introduction to R</a></li>
+<li class="chapter" data-level="2.2" data-path="downloading-r.html"><a href="downloading-r.html#installing-r"><i class="fa fa-check"></i><b>2.2</b> Installing R</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="downloading-r.html"><a href="downloading-r.html#installing-r-on-a-windows-pc"><i class="fa fa-check"></i><b>2.2.1</b> Installing R on a Windows PC</a></li>
+<li class="chapter" data-level="2.2.2" data-path="downloading-r.html"><a href="downloading-r.html#how-to-install-r-on-non-windows-computers-eg.-macintosh-or-linux-computers"><i class="fa fa-check"></i><b>2.2.2</b> How to install R on non-Windows computers (eg. Macintosh or Linux computers)</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="downloading-r.html"><a href="downloading-r.html#starting-r"><i class="fa fa-check"></i><b>2.3</b> Starting R</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="downloading-rstudio.html"><a href="downloading-rstudio.html"><i class="fa fa-check"></i><b>3</b> Downloading RStudio</a><ul>
+<li class="chapter" data-level="3.1" data-path="downloading-rstudio.html"><a href="downloading-rstudio.html#installing-rstudio"><i class="fa fa-check"></i><b>3.1</b> Installing RStudio</a></li>
+<li class="chapter" data-level="3.2" data-path="downloading-rstudio.html"><a href="downloading-rstudio.html#getting-to-know-rstudio"><i class="fa fa-check"></i><b>3.2</b> Getting to know RStudio</a></li>
+<li class="chapter" data-level="3.3" data-path="downloading-rstudio.html"><a href="downloading-rstudio.html#rstudio-versus-rstudio-cloud"><i class="fa fa-check"></i><b>3.3</b> RStudio versus RStudio Cloud</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="installing-r-packages.html"><a href="installing-r-packages.html"><i class="fa fa-check"></i><b>4</b> Installing R packages</a><ul>
+<li class="chapter" data-level="4.1" data-path="installing-r-packages.html"><a href="installing-r-packages.html#downloading-packages-with-the-rstudio-gui"><i class="fa fa-check"></i><b>4.1</b> Downloading packages with the RStudio GUI</a></li>
+<li class="chapter" data-level="4.2" data-path="installing-r-packages.html"><a href="installing-r-packages.html#downloading-packages-with-the-function-install.packages"><i class="fa fa-check"></i><b>4.2</b> Downloading packages with the function install.packages()</a></li>
+<li class="chapter" data-level="4.3" data-path="installing-r-packages.html"><a href="installing-r-packages.html#using-packages-after-they-are-downloaded"><i class="fa fa-check"></i><b>4.3</b> Using packages after they are downloaded</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="installing-bioconductor.html"><a href="installing-bioconductor.html"><i class="fa fa-check"></i><b>5</b> Installing Bioconductor</a><ul>
+<li class="chapter" data-level="5.1" data-path="installing-bioconductor.html"><a href="installing-bioconductor.html#bioconductor"><i class="fa fa-check"></i><b>5.1</b> Bioconductor</a></li>
+<li class="chapter" data-level="5.2" data-path="installing-bioconductor.html"><a href="installing-bioconductor.html#installing-biocmanager"><i class="fa fa-check"></i><b>5.2</b> Installing BiocManager</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html"><i class="fa fa-check"></i><b>6</b> Brief introduction to R</a><ul>
+<li class="chapter" data-level="6.1" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html#vocabulary"><i class="fa fa-check"></i><b>6.1</b> Vocabulary</a></li>
+<li class="chapter" data-level="6.2" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html#r-functions-etc"><i class="fa fa-check"></i><b>6.2</b> R functions etc</a></li>
+<li class="chapter" data-level="6.3" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html#a-brief-introduction-to-r"><i class="fa fa-check"></i><b>6.3</b> A brief introduction to R</a></li>
+<li class="chapter" data-level="6.4" data-path="brief-introduction-to-r.html"><a href="brief-introduction-to-r.html#links-and-further-reading"><i class="fa fa-check"></i><b>6.4</b> Links and Further Reading</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html"><i class="fa fa-check"></i><b>7</b> Introduction to NCBI databases</a><ul>
+<li class="chapter" data-level="7.1" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#to-do"><i class="fa fa-check"></i><b>7.1</b> To do</a></li>
+<li class="chapter" data-level="7.2" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#the-ncbi-sequence-database"><i class="fa fa-check"></i><b>7.2</b> The NCBI Sequence Database</a></li>
+<li class="chapter" data-level="7.3" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#the-ncbi-sub-databases"><i class="fa fa-check"></i><b>7.3</b> The NCBI Sub-Databases</a></li>
+<li class="chapter" data-level="7.4" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#searching-for-an-accession-number-in-the-ncbi-database"><i class="fa fa-check"></i><b>7.4</b> Searching for an accession number in the NCBI database</a></li>
+<li class="chapter" data-level="7.5" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#ncbi-sequence-format-ncbi-format"><i class="fa fa-check"></i><b>7.5</b> NCBI Sequence Format (NCBI Format)</a></li>
+<li class="chapter" data-level="7.6" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#refseq"><i class="fa fa-check"></i><b>7.6</b> RefSeq</a></li>
+<li class="chapter" data-level="7.7" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#querying-the-ncbi-database"><i class="fa fa-check"></i><b>7.7</b> Querying the NCBI Database</a></li>
+<li class="chapter" data-level="7.8" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#querying-the-ncbi-database-via-the-ncbi-website-for-reference"><i class="fa fa-check"></i><b>7.8</b> Querying the NCBI Database via the NCBI Website (for reference)</a></li>
+<li class="chapter" data-level="7.9" data-path="introduction-to-ncbi-databases.html"><a href="introduction-to-ncbi-databases.html#example-finding-the-sequences-published-in-nature-460352-358-for-reference"><i class="fa fa-check"></i><b>7.9</b> Example: finding the sequences published in Nature 460:352-358 (for reference)</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="downloading-ncbi-sequence-data-by-hand.html"><a href="downloading-ncbi-sequence-data-by-hand.html"><i class="fa fa-check"></i><b>8</b> Downloading NCBI sequence data by hand</a><ul>
+<li class="chapter" data-level="8.1" data-path="downloading-ncbi-sequence-data-by-hand.html"><a href="downloading-ncbi-sequence-data-by-hand.html#retrieving-genome-sequence-data-via-the-ncbi-website"><i class="fa fa-check"></i><b>8.1</b> Retrieving genome sequence data via the NCBI website</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html"><i class="fa fa-check"></i><b>9</b> Downloading sequences from UniProt by hand</a><ul>
+<li class="chapter" data-level="9.1" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#vocab"><i class="fa fa-check"></i><b>9.1</b> Vocab</a></li>
+<li class="chapter" data-level="9.2" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#uniprot"><i class="fa fa-check"></i><b>9.2</b> UniProt</a></li>
+<li class="chapter" data-level="9.3" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#viewing-the-uniprot-webpage-for-a-protein-sequence"><i class="fa fa-check"></i><b>9.3</b> Viewing the UniProt webpage for a protein sequence</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#protein-function"><i class="fa fa-check"></i><b>9.3.1</b> Protein function</a></li>
+<li class="chapter" data-level="9.3.2" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#protein-sequence-and-size"><i class="fa fa-check"></i><b>9.3.2</b> Protein sequence and size</a></li>
+<li class="chapter" data-level="9.3.3" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#other-information"><i class="fa fa-check"></i><b>9.3.3</b> Other information</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="downloading-sequences-from-uniprot-by-hand.html"><a href="downloading-sequences-from-uniprot-by-hand.html#retrieving-a-uniprot-protein-sequence-via-the-uniprot-website"><i class="fa fa-check"></i><b>9.4</b> Retrieving a UniProt protein sequence via the UniProt website</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="sequence-databases.html"><a href="sequence-databases.html"><i class="fa fa-check"></i><b>10</b> Sequence Databases</a><ul>
+<li class="chapter" data-level="10.1" data-path="sequence-databases.html"><a href="sequence-databases.html#querying-the-ncbi-database-via-r"><i class="fa fa-check"></i><b>10.1</b> Querying the NCBI Database via R</a></li>
+<li class="chapter" data-level="10.2" data-path="sequence-databases.html"><a href="sequence-databases.html#summary"><i class="fa fa-check"></i><b>10.2</b> Summary</a></li>
+<li class="chapter" data-level="10.3" data-path="sequence-databases.html"><a href="sequence-databases.html#acknowledgements"><i class="fa fa-check"></i><b>10.3</b> Acknowledgements</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html"><i class="fa fa-check"></i><b>11</b> Local variation in GC content - NOT UPDATED</a><ul>
+<li class="chapter" data-level="11.0.1" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#note-on-the-biology-in-this-section"><i class="fa fa-check"></i><b>11.0.1</b> Note on the biology in this section</a></li>
+<li class="chapter" data-level="11.1" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#vocabulary-1"><i class="fa fa-check"></i><b>11.1</b> Vocabulary</a></li>
+<li class="chapter" data-level="11.2" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#reading-sequence-data-with-rentrezentrez_fetch"><i class="fa fa-check"></i><b>11.2</b> Reading sequence data with rentrez::entrez_fetch</a></li>
+<li class="chapter" data-level="11.3" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#local-variation-in-gc-content"><i class="fa fa-check"></i><b>11.3</b> Local variation in GC content</a></li>
+<li class="chapter" data-level="11.4" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#acknowledgements-1"><i class="fa fa-check"></i><b>11.4</b> Acknowledgements</a><ul>
+<li class="chapter" data-level="11.4.1" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#license"><i class="fa fa-check"></i><b>11.4.1</b> License</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="local-variation-in-gc-content-not-updated.html"><a href="local-variation-in-gc-content-not-updated.html#exercises"><i class="fa fa-check"></i><b>11.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="alignments-in-r-not-updayed.html"><a href="alignments-in-r-not-updayed.html"><i class="fa fa-check"></i><b>12</b> Alignments in R - NOT UPDAYED</a><ul>
+<li class="chapter" data-level="12.1" data-path="alignments-in-r-not-updayed.html"><a href="alignments-in-r-not-updayed.html#retrieving-a-uniprot-protein-sequence-using-seqinr"><i class="fa fa-check"></i><b>12.1</b> Retrieving a UniProt protein sequence using SeqinR</a></li>
+<li class="chapter" data-level="12.2" data-path="alignments-in-r-not-updayed.html"><a href="alignments-in-r-not-updayed.html#comparing-two-sequences-using-a-dotplot"><i class="fa fa-check"></i><b>12.2</b> Comparing two sequences using a dotplot</a></li>
+<li class="chapter" data-level="12.3" data-path="alignments-in-r-not-updayed.html"><a href="alignments-in-r-not-updayed.html#aligning-uniprot-sequences"><i class="fa fa-check"></i><b>12.3</b> Aligning UniProt sequences</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="comparative-genomics.html"><a href="comparative-genomics.html"><i class="fa fa-check"></i><b>13</b> Comparative Genomics</a><ul>
+<li class="chapter" data-level="13.1" data-path="comparative-genomics.html"><a href="comparative-genomics.html#introduction-1"><i class="fa fa-check"></i><b>13.1</b> Introduction</a></li>
+<li class="chapter" data-level="13.2" data-path="comparative-genomics.html"><a href="comparative-genomics.html#using-the-biomart-r-library-to-query-the-ensembl-database"><i class="fa fa-check"></i><b>13.2</b> Using the biomaRt R Library to Query the Ensembl Database</a></li>
+<li class="chapter" data-level="13.3" data-path="comparative-genomics.html"><a href="comparative-genomics.html#identifying-homologous-genes-between-two-species"><i class="fa fa-check"></i><b>13.3</b> Identifying homologous genes between two species</a></li>
+<li class="chapter" data-level="13.4" data-path="comparative-genomics.html"><a href="comparative-genomics.html#summary-1"><i class="fa fa-check"></i><b>13.4</b> Summary</a></li>
+<li class="chapter" data-level="13.5" data-path="comparative-genomics.html"><a href="comparative-genomics.html#exercises-1"><i class="fa fa-check"></i><b>13.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="hidden-markov-models.html"><a href="hidden-markov-models.html"><i class="fa fa-check"></i><b>14</b> Hidden Markov Models</a><ul>
+<li class="chapter" data-level="14.1" data-path="hidden-markov-models.html"><a href="hidden-markov-models.html#r-programming-101-initializing-vectors"><i class="fa fa-check"></i><b>14.1</b> R Programming 101: Initializing vectors</a></li>
+<li class="chapter" data-level="14.2" data-path="hidden-markov-models.html"><a href="hidden-markov-models.html#r-programming-101-matrices"><i class="fa fa-check"></i><b>14.2</b> R Programming 101: matrices</a></li>
+<li class="chapter" data-level="14.3" data-path="hidden-markov-models.html"><a href="hidden-markov-models.html#a-multinomial-model-of-dna-sequence-evolution"><i class="fa fa-check"></i><b>14.3</b> A multinomial model of DNA sequence evolution</a></li>
+<li class="chapter" data-level="14.4" data-path="hidden-markov-models.html"><a href="hidden-markov-models.html#a-markov-model-of-dna-sequence-evolution"><i class="fa fa-check"></i><b>14.4</b> A Markov model of DNA sequence evolution</a></li>
+<li class="chapter" data-level="14.5" data-path="hidden-markov-models.html"><a href="hidden-markov-models.html#the-transition-matrix-for-a-markov-model"><i class="fa fa-check"></i><b>14.5</b> The transition matrix for a Markov model</a></li>
+<li class="chapter" data-level="14.6" data-path="hidden-markov-models.html"><a href="hidden-markov-models.html#generating-a-dna-sequence-using-a-markov-model"><i class="fa fa-check"></i><b>14.6</b> Generating a DNA sequence using a Markov model</a></li>
+<li class="chapter" data-level="14.7" data-path="hidden-markov-models.html"><a href="hidden-markov-models.html#a-hidden-markov-model-of-dna-sequence-evolution"><i class="fa fa-check"></i><b>14.7</b> A Hidden Markov Model of DNA sequence evolution</a></li>
+<li class="chapter" data-level="14.8" data-path="hidden-markov-models.html"><a href="hidden-markov-models.html#the-transition-matrix-and-emission-matrix-for-a-hmm"><i class="fa fa-check"></i><b>14.8</b> The transition matrix and emission matrix for a HMM</a></li>
+<li class="chapter" data-level="14.9" data-path="hidden-markov-models.html"><a href="hidden-markov-models.html#generating-a-dna-sequence-using-a-hmm"><i class="fa fa-check"></i><b>14.9</b> Generating a DNA sequence using a HMM</a></li>
+<li class="chapter" data-level="14.10" data-path="hidden-markov-models.html"><a href="hidden-markov-models.html#inferring-the-states-of-a-hmm-that-generated-a-dna-sequence"><i class="fa fa-check"></i><b>14.10</b> Inferring the states of a HMM that generated a DNA sequence</a></li>
+<li class="chapter" data-level="14.11" data-path="hidden-markov-models.html"><a href="hidden-markov-models.html#a-hidden-markov-model-of-protein-sequence-evolution"><i class="fa fa-check"></i><b>14.11</b> A Hidden Markov Model of protein sequence evolution</a></li>
+<li class="chapter" data-level="14.12" data-path="hidden-markov-models.html"><a href="hidden-markov-models.html#summary-2"><i class="fa fa-check"></i><b>14.12</b> Summary</a></li>
+<li class="chapter" data-level="14.13" data-path="hidden-markov-models.html"><a href="hidden-markov-models.html#exercises-2"><i class="fa fa-check"></i><b>14.13</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="multiple-alignment-with-clustal.html"><a href="multiple-alignment-with-clustal.html"><i class="fa fa-check"></i><b>15</b> Multiple alignment with Clustal</a><ul>
+<li class="chapter" data-level="15.1" data-path="multiple-alignment-with-clustal.html"><a href="multiple-alignment-with-clustal.html#installing-the-clustal-multiple-alignment-software"><i class="fa fa-check"></i><b>15.1</b> Installing the CLUSTAL multiple alignment software</a></li>
+<li class="chapter" data-level="15.2" data-path="multiple-alignment-with-clustal.html"><a href="multiple-alignment-with-clustal.html#discarding-very-poorly-conserved-regions-from-an-alignment"><i class="fa fa-check"></i><b>15.2</b> Discarding very poorly conserved regions from an alignment</a></li>
+<li class="chapter" data-level="15.3" data-path="multiple-alignment-with-clustal.html"><a href="multiple-alignment-with-clustal.html#calculating-genetic-distances-between-protein-sequences"><i class="fa fa-check"></i><b>15.3</b> Calculating genetic distances between protein sequences</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="unrooted-neighbor-joining-phylogenetic-trees.html"><a href="unrooted-neighbor-joining-phylogenetic-trees.html"><i class="fa fa-check"></i><b>16</b> Unrooted Neighbor-joining Phylogenetic trees</a><ul>
+<li class="chapter" data-level="16.1" data-path="unrooted-neighbor-joining-phylogenetic-trees.html"><a href="unrooted-neighbor-joining-phylogenetic-trees.html#building-an-unrooted-phylogenetic-tree-for-protein-sequences"><i class="fa fa-check"></i><b>16.1</b> Building an unrooted phylogenetic tree for protein sequences</a></li>
+<li class="chapter" data-level="16.2" data-path="unrooted-neighbor-joining-phylogenetic-trees.html"><a href="unrooted-neighbor-joining-phylogenetic-trees.html#calculating-the-statistical-significance-of-a-pairwise-global-alignment"><i class="fa fa-check"></i><b>16.2</b> Calculating the statistical significance of a pairwise global alignment</a></li>
+<li class="chapter" data-level="16.3" data-path="unrooted-neighbor-joining-phylogenetic-trees.html"><a href="unrooted-neighbor-joining-phylogenetic-trees.html#summary-3"><i class="fa fa-check"></i><b>16.3</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="retrieving-multiple-sequences-in-r.html"><a href="retrieving-multiple-sequences-in-r.html"><i class="fa fa-check"></i><b>17</b> Retrieving multiple sequences in R</a><ul>
+<li class="chapter" data-level="17.1" data-path="retrieving-multiple-sequences-in-r.html"><a href="retrieving-multiple-sequences-in-r.html#prelminaries"><i class="fa fa-check"></i><b>17.1</b> Prelminaries</a></li>
+<li class="chapter" data-level="17.2" data-path="retrieving-multiple-sequences-in-r.html"><a href="retrieving-multiple-sequences-in-r.html#retrieving-a-list-of-sequences-from-uniprot"><i class="fa fa-check"></i><b>17.2</b> Retrieving a list of sequences from UniProt</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="computational-gene-finding.html"><a href="computational-gene-finding.html"><i class="fa fa-check"></i><b>18</b> Computational gene finding</a><ul>
+<li class="chapter" data-level="18.1" data-path="computational-gene-finding.html"><a href="computational-gene-finding.html#the-genetic-code"><i class="fa fa-check"></i><b>18.1</b> The genetic code</a></li>
+<li class="chapter" data-level="18.2" data-path="computational-gene-finding.html"><a href="computational-gene-finding.html#reading-frames"><i class="fa fa-check"></i><b>18.2</b> Reading frames</a></li>
+<li class="chapter" data-level="18.3" data-path="computational-gene-finding.html"><a href="computational-gene-finding.html#finding-open-reading-frames-on-the-forward-strand-of-a-dna-sequence"><i class="fa fa-check"></i><b>18.3</b> Finding open reading frames on the forward strand of a DNA sequence</a></li>
+<li class="chapter" data-level="18.4" data-path="computational-gene-finding.html"><a href="computational-gene-finding.html#lengths-of-open-reading-frames"><i class="fa fa-check"></i><b>18.4</b> Lengths of open reading frames</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="significance-of-orfs.html"><a href="significance-of-orfs.html"><i class="fa fa-check"></i><b>19</b> Significance of ORFs</a><ul>
+<li class="chapter" data-level="19.1" data-path="significance-of-orfs.html"><a href="significance-of-orfs.html#identifying-significant-open-reading-frames"><i class="fa fa-check"></i><b>19.1</b> Identifying significant open reading frames</a></li>
+<li class="chapter" data-level="19.2" data-path="significance-of-orfs.html"><a href="significance-of-orfs.html#summary-4"><i class="fa fa-check"></i><b>19.2</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="rooted-neighbor-joing-phylogenetic-trees.html"><a href="rooted-neighbor-joing-phylogenetic-trees.html"><i class="fa fa-check"></i><b>20</b> Rooted Neighbor-joing Phylogenetic trees</a><ul>
+<li class="chapter" data-level="20.1" data-path="rooted-neighbor-joing-phylogenetic-trees.html"><a href="rooted-neighbor-joing-phylogenetic-trees.html#building-a-rooted-phylogenetic-tree-for-protein-sequences"><i class="fa fa-check"></i><b>20.1</b> Building a rooted phylogenetic tree for protein sequences</a></li>
+<li class="chapter" data-level="20.2" data-path="rooted-neighbor-joing-phylogenetic-trees.html"><a href="rooted-neighbor-joing-phylogenetic-trees.html#building-a-phylogenetic-tree-for-dna-or-mrna-sequences"><i class="fa fa-check"></i><b>20.2</b> Building a phylogenetic tree for DNA or mRNA sequences</a></li>
+<li class="chapter" data-level="20.3" data-path="rooted-neighbor-joing-phylogenetic-trees.html"><a href="rooted-neighbor-joing-phylogenetic-trees.html#summary-5"><i class="fa fa-check"></i><b>20.3</b> Summary</a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="todo.html"><a href="todo.html"><i class="fa fa-check"></i><b>21</b> TODO</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://https://github.com/brouwern/CB4ALL" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Computational Biology for All</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="hidden-markov-models" class="section level1">
+<h1><span class="header-section-number">Chapter 14</span> Hidden Markov Models</h1>
+<p>By: Avril Coghlan, adapted by Nathan Brouwer</p>
+<div id="r-programming-101-initializing-vectors" class="section level2">
+<h2><span class="header-section-number">14.1</span> R Programming 101: Initializing vectors</h2>
+<p>In previous practicals, you learnt how to create different types of variables in R such as <strong>vectors</strong> and <strong>lists</strong>. Sometimes it is useful to create an empty variable before you actually need to store any data in the variable. To create a vector without actually storing any data in it, you can use the numeric() command to create a vector for storing numbers, or the character() command to create a vector for storing characters (eg. “A”, “hello”, etc.). This is called <strong>initializing a vector</strong>. This is often doen when using for() loops or doing other programming tasks where you need to store data that is being generated by an algorithm.</p>
+<p>For example, you may want to create a vector variable for storing the square of a number, and then store numbers in its elements afterwards:</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="hidden-markov-models.html#cb112-1"></a>myvector &lt;-<span class="st"> </span><span class="kw">numeric</span>()                  <span class="co"># Create a vector &quot;myvector&quot; for storing numbers</span></span>
+<span id="cb112-2"><a href="hidden-markov-models.html#cb112-2"></a> <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) { </span>
+<span id="cb112-3"><a href="hidden-markov-models.html#cb112-3"></a>   myvector[i] &lt;-<span class="st"> </span>i<span class="op">*</span>i                  <span class="co"># Fill in the values in the vector &quot;myvector&quot;</span></span>
+<span id="cb112-4"><a href="hidden-markov-models.html#cb112-4"></a>   } </span>
+<span id="cb112-5"><a href="hidden-markov-models.html#cb112-5"></a></span>
+<span id="cb112-6"><a href="hidden-markov-models.html#cb112-6"></a>myvector                               <span class="co"># Print out the vector &quot;myvector&quot;</span></span></code></pre></div>
+<p>Note that if you try to store numbers in the elements of a vector that you have not yet created, you will get an error message, for example, if you try to run the following code you will get an error</p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="hidden-markov-models.html#cb113-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>) { </span>
+<span id="cb113-2"><a href="hidden-markov-models.html#cb113-2"></a>  avector[i] &lt;-<span class="st"> </span>i<span class="op">*</span>i </span>
+<span id="cb113-3"><a href="hidden-markov-models.html#cb113-3"></a>  }  <span class="co"># Try to store values in the vector &quot;avector&quot;</span></span></code></pre></div>
+<p>When you know how many <strong>iterations</strong> of a process are going to occur it can be very useful to pre-specify the size of the vector by creating a vector that only consists of NA values.</p>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="hidden-markov-models.html#cb114-1"></a>myvector &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, <span class="dv">10</span>)</span></code></pre></div>
+<p>This gives you a pre-made vector that you can fill up.</p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="hidden-markov-models.html#cb115-1"></a>myvector</span></code></pre></div>
+</div>
+<div id="r-programming-101-matrices" class="section level2">
+<h2><span class="header-section-number">14.2</span> R Programming 101: matrices</h2>
+<p>Another very useful type of variable is a matrix. You can create a matrix in R using the matrix() command. If you look at the help page for the matrix() command, you will see that its arguments (inputs) are the data to store in the matrix, the number of rows to store it in, the number of columns to store it in, and whether to fill the matrix with data column-by-column or row-by-row. For example, say you have the heights and weights of eight patients in a hospital in two different vectors:</p>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="hidden-markov-models.html#cb116-1"></a>heights &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">180</span>, <span class="dv">170</span>, <span class="dv">175</span>, <span class="dv">160</span>, <span class="dv">183</span>, <span class="dv">177</span>, <span class="dv">179</span>, <span class="dv">182</span>)</span>
+<span id="cb116-2"><a href="hidden-markov-models.html#cb116-2"></a>weights &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">90</span>, <span class="dv">88</span>, <span class="dv">100</span>, <span class="dv">68</span>, <span class="dv">95</span>, <span class="dv">120</span>, <span class="dv">88</span>, <span class="dv">93</span>)</span></code></pre></div>
+<p>You could then say plot it like this</p>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="hidden-markov-models.html#cb117-1"></a><span class="kw">plot</span>(heights <span class="op">~</span><span class="st"> </span>weights)</span></code></pre></div>
+<p>To store this data in a <strong>matrix</strong> that has one column per person, and one row for heights and one row for weights, we type:</p>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="hidden-markov-models.html#cb118-1"></a>mymatrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(heights,weights), <span class="dv">2</span>, <span class="dv">8</span>, <span class="dt">byrow=</span><span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="hidden-markov-models.html#cb119-1"></a>mymatrix <span class="co"># Print out the matrix</span></span></code></pre></div>
+<p>We needed to use the argument “byrow=TRUE” to tell the matrix() command to fill the matrix row-by-row (ie. to put the values from the vector heights into the first row of the matrix, and the values from the vector weights into the second row of the matrix).</p>
+<p>You can assign names to the rows and columns of a matrix using the rownames() and colnames() commands, respectively. For example, to assign names to the rows and columns of matrix mymatrix, you could type:</p>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="hidden-markov-models.html#cb120-1"></a><span class="kw">rownames</span>(mymatrix) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;height&quot;</span>, <span class="st">&quot;weight&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="hidden-markov-models.html#cb121-1"></a><span class="kw">colnames</span>(mymatrix) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;patient1&quot;</span>, <span class="st">&quot;patient2&quot;</span>, <span class="st">&quot;patient3&quot;</span>, <span class="st">&quot;patient4&quot;</span>, <span class="st">&quot;patient5&quot;</span>, <span class="st">&quot;patient6&quot;</span>, <span class="st">&quot;patient7&quot;</span>, <span class="st">&quot;patient8&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="hidden-markov-models.html#cb122-1"></a>mymatrix <span class="co"># Print out the matrix now</span></span></code></pre></div>
+<p>Once you have created a matrix, you can access the values in the elements of the matrix by using square brackets containing the indices of the row and column of the element. For example, if you want to access the value in the second row and fourth column of matrix mymatrix, you can type:</p>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="hidden-markov-models.html#cb123-1"></a>mymatrix[<span class="dv">2</span>,<span class="dv">4</span>]</span></code></pre></div>
+<p>If you want to access all the values in a particular row of the matrix, you can just type the index for the row, and leave out the index for the column. For example, if you want to get the values in the second row of the matrix mymatrix, type:</p>
+<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="hidden-markov-models.html#cb124-1"></a>mymatrix[<span class="dv">2</span>,]</span></code></pre></div>
+<p>Likewise, if you want to get the values in a particular column of a matrix, leave out the index for the row, and just type the column index. For example, if you want to get the values in the fourth row of the mymatrix, type:</p>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="hidden-markov-models.html#cb125-1"></a>mymatrix[,<span class="dv">4</span>]</span></code></pre></div>
+</div>
+<div id="a-multinomial-model-of-dna-sequence-evolution" class="section level2">
+<h2><span class="header-section-number">14.3</span> A multinomial model of DNA sequence evolution</h2>
+<p>The simplest model of DNA sequence evolution assumes that the sequence has been produced by a random process that randomly chose any of the four nucleotides at each position in the sequence, where the probability of choosing any one of the four nucleotides depends on a predetermined probability distribution. That is, the four nucleotides are chosen with pA, pC, pG, and pT respectively. This is known as the multinomial sequence model.</p>
+<p>A multinomial model for DNA sequence evolution has four parameters: the probabilities of the four nucleotides pA, pC, pG, and pT. For example, say we may create a multinomial model where pA=0.2, pC=0.3, pG=0.3, and pT=0.2. This means that the probability of choosing a A at any particular sequence position is set to be 0.2, the probability of choosing a C is 0.3, of choosing a G is 0.3, and of choosing a T is 0.2. Note that pA + pC + pG + pT = 1, as the sum of the probabilities of the four different types of nucleotides must be equal to 1, as there are only four possible types of nucleotide.</p>
+<p>The multinomial sequence model is like having a roulette wheel that is divided into four different slices labelled “A”, “T”, “G” and “C”, where the pA, pT, pGand pC are the fractions of the wheel taken up by the slices with these four labels. If you spin the arrow attached to the centre of the roulette wheel, the probability that it will stop in the slice with a particular label (eg. the slice labelled “A”) only depends on the fraction of the wheel taken up by that slice (pA here; see the picture below).</p>
+<p>image0</p>
+<p>Generating a DNA sequence using a multinomial model
+We can use R to generate a DNA sequence using a particular multinomial model. First we need to set the values of the four parameters of the multinomial model, the probabilities pA, pC, pG, and pT of choosing the nucleotides A, C, G and T, respectively, at a particular position in the DNA sequence. For example, say we decide to set pA=0.2, pC=0.3, pG=0.3, and pT=0.2. We can use the function sample() in R to generate a DNA sequence of a certain length, by selecting a nucleotide at each position according to this probability distribution:</p>
+<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="hidden-markov-models.html#cb126-1"></a>nucleotides    &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;T&quot;</span>) <span class="co"># Define the alphabet of nucleotides</span></span></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="hidden-markov-models.html#cb127-1"></a>probabilities1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">0.2</span>) <span class="co"># Set the values of the probabilities</span></span></code></pre></div>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="hidden-markov-models.html#cb128-1"></a>seqlength      &lt;-<span class="st"> </span><span class="dv">30</span>                    <span class="co"># Set the length of the sequence</span></span></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="hidden-markov-models.html#cb129-1"></a><span class="kw">sample</span>(nucleotides, seqlength, <span class="dt">rep=</span><span class="ot">TRUE</span>, <span class="dt">prob=</span>probabilities1) <span class="co"># Generate a sequence</span></span></code></pre></div>
+<p>If you look at the help page for the function(), you will find that its inputs are the vector to sample from (nucleotides here), the size of the sample (seqlength here), and a vector of probabilities for obtaining the elements of the vector being sampled (probabilities1 here). If we use the sample() function to generate a sequence again, it will create a different sequence using the same multinomial model:</p>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="hidden-markov-models.html#cb130-1"></a><span class="kw">sample</span>(nucleotides, seqlength, <span class="dt">rep=</span><span class="ot">TRUE</span>, <span class="dt">prob=</span>probabilities1) <span class="co"># Generate another sequence</span></span></code></pre></div>
+<p>In the same way, we can generate a sequence using a different multinomial model, where pA=0.1, pC=0.41, pG=0.39, and pT=0.1:</p>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb131-1"><a href="hidden-markov-models.html#cb131-1"></a>probabilities2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.41</span>, <span class="fl">0.39</span>, <span class="fl">0.1</span>) <span class="co"># Set the values of the probabilities for the new model</span></span></code></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="hidden-markov-models.html#cb132-1"></a><span class="kw">sample</span>(nucleotides, seqlength, <span class="dt">rep=</span><span class="ot">TRUE</span>, <span class="dt">prob=</span>probabilities2) <span class="co"># Generate a sequence</span></span></code></pre></div>
+<p>As you would expect, the sequences generated using this second multinomial model have a higher fraction of Cs and Gs compared to the sequences generated using the first multinomial model above. This is because pC and GT are higher for this second model than for the first model (pC=0.41 and GT=0.39 in the second model, versus pC=0.3 and GT=0.3 in the first model). That is, in the second multinomial model we are using a roulette wheel that has large slices labelled “C” and “G”, while in the first multinomial model we were using a roulette wheel with relatively smaller slices labelled “C” and “G” (see the picture below).</p>
+<p>image1</p>
+</div>
+<div id="a-markov-model-of-dna-sequence-evolution" class="section level2">
+<h2><span class="header-section-number">14.4</span> A Markov model of DNA sequence evolution</h2>
+<p>A multinomial model of DNA sequence evolution is a good model of the evolution of many DNA sequences. However, for some DNA sequences, a multinomial model is not an accurate representation of how the sequences have evolved. One reason is that a multinomial model assumes that each part of the sequence (eg. the first 100 nucleotides of the sequence, the second 100 nucleotides, the third 100 nucleotides, etc.) have the same frequency of each type of nucleotide (the same pA, pC, pG, and pT), and this may not be true for a particular DNA sequence if there are considerable differences in nucleotide frequencies in different parts of the sequence.</p>
+<p>Another assumption of a multinomial model of DNA sequence evolution is that the probability of choosing a particular nucleotide (eg. “A”) at a particular position in the sequence only depends on the predetermined frequency of that nucleotide (pA here), and does not depend at all on the nucleotides found at adjacent positions in the sequence. This assumption holds true for many DNA sequences. However, for some DNA sequences, it is not true, because the probability of finding a particular nucleotide at a particular position in the sequence does depend on what nucleotides are found at adjacent positions in the sequence. In this case, a different type of DNA sequence model called a Markov sequence model is a more accurate representation of the evolution of the sequence.</p>
+<p>A Markov sequence model assumes that the sequence has been produced by a process that chose any of the four nucleotides in the sequence, where the probability of choosing any one of the four nucleotides at a particular position depends on the nucleotide chosen for the previous position. That is, if “A” was chosen at the previous position, then the probability of choosing any one of the four nucleotides at the current position depends on a predetermined probability distribution. That is, given that “A” was chosen at the previous position, the four nucleotides are chosen at the current position with probabilities of pA, pC, pG, and pT of choosing “A”, “C”, “G”, or “T”, respectively (eg. pA=0.2, pC=0.3, pG=0.3, and pT=0.2). In contrast, if “C” was chosen at the previous position, then the probability of choosing any one of the four nucleotides at the current position depends on a different predetermined probability distribution, that is, the probabilities of choosing “A”, “C”, “G”, or “T” at the current position are now different (eg. pA=0.1, pC=0.41, pG=0.39, and pT=0.1).</p>
+<p>A Markov sequence model is like having four different roulette wheels, labelled “afterA”, “afterT”, “afterG”, and “afterC”, for the cases when “A”, “T”, “G”, or “C” were chosen at the previous position in a sequence, respectively. Each of the four roulette wheels has four slices labelled “A”, “T”, “G”, and “C”, but in each roulette wheel a different fraction of the wheel is taken up by the four slices. That is, each roulette wheel has a different pA, pT, pG and pC. If we are generating a new DNA sequence using a Markov sequence model, to decide what nucleotide to choose at a particular position in the sequence, you spin the arrow at the centre of a roulette wheel, and see in which slice the arrow stops. There are four roulette wheels, and the particular roulette wheel we use at a particular position in the sequence depends on the nucleotide chosen for the previous position in the sequence. For example, if “T” was chosen at the previous position, we use the “afterT” roulette wheel to choose the nucleotide for the current position. The probability of choosing a particular nucleotide at the current position (eg. “A”) then depends on the fraction of the “afterT” roulette wheel taken up by the the slice labelled with that nucleotide (pA here; see the picture below).</p>
+<p>image2</p>
+</div>
+<div id="the-transition-matrix-for-a-markov-model" class="section level2">
+<h2><span class="header-section-number">14.5</span> The transition matrix for a Markov model</h2>
+<p>A multinomial model of DNA sequence evolution just has four parameters: the probabilities pA, pC, pG, and pT. In contrast, a Markov model has many more parameters: four sets of probabilities pA, pC, pG, and pT, that differ according to whether the previous nucleotide was “A”, “G”, “T” or “C”. The symbols pAA, pAC, pAG, and pAT are usually used to represent the four probabilities for the case where the previous nucleotide was “A”, the symbols pCA, pCC, pCG, and pCT for the case when the previous nucleotide was “C”, and so on.</p>
+<p>It is common to store the probability parameters for a Markov model of a DNA sequence in a square matrix, which is known as a Markov transition matrix. The rows of the transition matrix represent the nucleotide found at the previous position in the sequence, while the columns represent the nucleotides that could be found at the current position in the sequence. In R, you can create a matrix using the matrix() command, and the rownames() and colnames() functions can be used to label the rows and columns of the matrix. For example, to create a transition matrix, we type:</p>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="hidden-markov-models.html#cb133-1"></a>nucleotides         &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;T&quot;</span>) <span class="co"># Define the alphabet of nucleotides</span></span></code></pre></div>
+<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb134-1"><a href="hidden-markov-models.html#cb134-1"></a>afterAprobs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.2</span>, <span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">0.2</span>)         <span class="co"># Set the values of the probabilities, where the previous nucleotide was &quot;A&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb135-1"><a href="hidden-markov-models.html#cb135-1"></a>afterCprobs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.41</span>, <span class="fl">0.39</span>, <span class="fl">0.1</span>)       <span class="co"># Set the values of the probabilities, where the previous nucleotide was &quot;C&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="hidden-markov-models.html#cb136-1"></a>afterGprobs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>, <span class="fl">0.25</span>)     <span class="co"># Set the values of the probabilities, where the previous nucleotide was &quot;G&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="hidden-markov-models.html#cb137-1"></a>afterTprobs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.17</span>, <span class="fl">0.17</span>, <span class="fl">0.17</span>)      <span class="co"># Set the values of the probabilities, where the previous nucleotide was &quot;T&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="hidden-markov-models.html#cb138-1"></a>mytransitionmatrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(afterAprobs, afterCprobs, afterGprobs, afterTprobs), <span class="dv">4</span>, <span class="dv">4</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>) <span class="co"># Create a 4 x 4 matrix</span></span></code></pre></div>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="hidden-markov-models.html#cb139-1"></a><span class="kw">rownames</span>(mytransitionmatrix) &lt;-<span class="st"> </span>nucleotides</span>
+<span id="cb139-2"><a href="hidden-markov-models.html#cb139-2"></a><span class="kw">colnames</span>(mytransitionmatrix) &lt;-<span class="st"> </span>nucleotides</span></code></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="hidden-markov-models.html#cb140-1"></a>mytransitionmatrix                           <span class="co"># Print out the transition matrix</span></span></code></pre></div>
+<p>Rows 1, 2, 3 and 4 of the transition matrix give the probabilities pA, pC, pG, and pT for the cases where the previous nucleotide was “A”, “C”, “G”, or “T”, respectively. That is, the element in a particular row and column of the transition matrix (eg. the row for “A”, column for “C”) holds the probability (pAC) of choosing a particular nucleotide (“C”) at the current position in the sequence, given that was a particular nucleotide (“A”) at the previous position in the sequence.</p>
+</div>
+<div id="generating-a-dna-sequence-using-a-markov-model" class="section level2">
+<h2><span class="header-section-number">14.6</span> Generating a DNA sequence using a Markov model</h2>
+<p>Just as you can generate a DNA sequence using a particular multinomial model, you can generate a DNA sequence using a particular Markov model. When you are generating a DNA sequence using a Markov model, the nucleotide chosen at each position at the sequence depends on the nucleotide chosen at the previous position. As there is no previous nucleotide at the first position in the new sequence, we need to define the probabilities of choosing “A”, “C”, “G” or “T” for the first position. The symbols ΠA, ΠC, ΠG, and ΠT are used to represent the probabilities of choosing “A”, “C”, “G”, or “T” at the first position.</p>
+<p>We can define an R function generatemarkovseq() to generate a DNA sequence using a particular Markov model:</p>
+<p>The function generatemarkovseq() takes as its arguments (inputs) the transition matrix for the particular Markov model; a vector containing the values of ΠA, ΠC, ΠG, and ΠT; and the length of the DNA sequence to be generated.</p>
+<p>The probabilities of choosing each of the four nucleotides at the first position in the sequence are ΠA, ΠC, ΠG, and ΠT. The probabilities of choosing each of the four nucleotides at the second position in the sequence depend on the particular nucleotide that was chosen at the first position in the sequence. The probabilities of choosing each of the four nucleotides at the third position depend on the nucleotide chosen at the second position, and so on.</p>
+<p>We can use the generatemarkovseq() function to generate a sequence using a particular Markov model. For example, to create a sequence of 30 nucleotides using the Markov model described in the transition matrix mytransitionmatrix, using uniform starting probabilities (ie. ΠA = 0.25, ΠC = 0.25, ΠG = 0.25, and ΠT = 0.25) , we type:</p>
+<p>As you can see, there are many “A”s after “T”s in the sequence. This is because pTA has a high value (0.5) in the Markov transition matrix mytransitionmatrix. Similarly, there are few “A”s or “T”s after “C”s, which is because pCA and pCT have low values (0.1) in this transition matrix.</p>
+</div>
+<div id="a-hidden-markov-model-of-dna-sequence-evolution" class="section level2">
+<h2><span class="header-section-number">14.7</span> A Hidden Markov Model of DNA sequence evolution</h2>
+<p>In a Markov model, the nucleotide at a particular position in a sequence depends on the nucleotide found at the previous position. In contrast, in a Hidden Markov model (HMM), the nucleotide found at a particular position in a sequence depends on the state at the previous nucleotide position in the sequence. The state at a sequence position is a property of that position of the sequence, for example, a particular HMM may model the positions along a sequence as belonging to either one of two states, “GC-rich” or “AT-rich”. A more complex HMM may model the positions along a sequence as belonging to many different possible states, such as “promoter”, “exon”, “intron”, and “intergenic DNA”.</p>
+<p>A HMM is like having several different roulette wheels, one roulette wheel for each state in the HMM, for example, a “GC-rich” and an “AT-rich” roulette wheel. Each of the roulette wheels has four slices labelled “A”, “T”, “G”, and “C”, and in each roulette wheel a different fraction of the wheel is taken up by the four slices. That is, the “GC-rich” and “AT-rich” roulette wheels have different pA, pT, pG and pC values. If we are generating a new DNA sequence using a HMM, to decide what nucleotide to choose at a particular sequence position, we spin the arrow of a particular roulette wheel, and see in which slice it stops.</p>
+<p>How do we decide which roulette wheel to use? Well, if there are two roulette wheels, we tend to use the same roulette wheel that we used to choose the previous nucleotide in the sequence, but there is also a certain small probability of switching to the other roulette wheel. For example, if we used the “GC-rich” roulette wheel to choose the previous nucleotide in the sequence, there may be a 90% chance that we will use the “GC-rich” roulette wheel again to choose the nucleotide at the current position, but a 10% chance that we will switch to using the “AT-rich” roulette wheel to choose the nucleotide at the current position. Likewise, if we used the “AT-rich” roulette wheel to choose the nucleotide at the previous position, there may be 70% chance that we will use the “AT-rich” wheel again at this position, but a 30% chance that we will switch to using the “GC-rich” roulette wheel to choose the nucleotide at this position.</p>
+<p>image3</p>
+</div>
+<div id="the-transition-matrix-and-emission-matrix-for-a-hmm" class="section level2">
+<h2><span class="header-section-number">14.8</span> The transition matrix and emission matrix for a HMM</h2>
+<p>A HMM has two important matrices that hold its parameters. The first is the HMM transition matrix, which contains the probabilities of switching from one state to another. For example, in a HMM with two states, an AT-rich state and a GC-rich state, the transition matrix will hold the probabilities of switching from the AT-rich state to the GC-rich state, and of switching from the GC-rich state to the AT-rich state. For example, if the previous nucleotide was in the AT-rich state there may be a probability of 0.3 that the current nucleotide will be in the GC-rich state, and if the previous nucleotide was in the GC-rich state there may be a probability of 0.1 that the current nucleotide will be in the AT-rich state:</p>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="hidden-markov-models.html#cb141-1"></a>states              &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;AT-rich&quot;</span>, <span class="st">&quot;GC-rich&quot;</span>) <span class="co"># Define the names of the states</span></span></code></pre></div>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="hidden-markov-models.html#cb142-1"></a>ATrichprobs         &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.7</span>, <span class="fl">0.3</span>)             <span class="co"># Set the probabilities of switching states, where the previous state was &quot;AT-rich&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="hidden-markov-models.html#cb143-1"></a>GCrichprobs         &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>)             <span class="co"># Set the probabilities of switching states, where the previous state was &quot;GC-rich&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="hidden-markov-models.html#cb144-1"></a>thetransitionmatrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(ATrichprobs, GCrichprobs), <span class="dv">2</span>, <span class="dv">2</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>) <span class="co"># Create a 2 x 2 matrix</span></span></code></pre></div>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="hidden-markov-models.html#cb145-1"></a><span class="kw">rownames</span>(thetransitionmatrix) &lt;-<span class="st"> </span>states</span>
+<span id="cb145-2"><a href="hidden-markov-models.html#cb145-2"></a><span class="kw">colnames</span>(thetransitionmatrix) &lt;-<span class="st"> </span>states</span></code></pre></div>
+<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="hidden-markov-models.html#cb146-1"></a>thetransitionmatrix                            <span class="co"># Print out the transition matrix</span></span></code></pre></div>
+<p>There is a row in the transition matrix for each of the possible states at the previous position in the nucleotide sequence. For example, in this transition matrix, the first row corresponds to the case where the previous position was in the “AT-rich” state, and the second row corresponds to the case where the previous position was in the “GC-rich” state. The columns give the probabilities of switching to different states at the current position. For example, the value in the second row and first column of the transition matrix above is 0.1, which is the probability of switching to the AT-rich state, if the previous position of the sequence was in the GC-rich state.</p>
+<p>The second important matrix is the HMM emission matrix, which holds the probabilities of choosing the four nucleotides “A”, “C”, “G”, and “T”, in each of the states. In a HMM with an AT-rich state and a GC-rich state, the emission matrix will hold the probabilities of choosing each of the four nucleotides “A”, “C”, “G” and “T” in the AT-rich state (for example, pA=0.39, pC=0.1, pG=0.1, and pT=0.41 for the AT-rich state), and the probabilities of choosing “A”, “C”, “G”, and “T” in the GC-rich state (for example, pA=0.1, pC=0.41, pG=0.39, and pT=0.1 for the GC-rich state).</p>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="hidden-markov-models.html#cb147-1"></a>nucleotides         &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;T&quot;</span>)   <span class="co"># Define the alphabet of nucleotides</span></span></code></pre></div>
+<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="hidden-markov-models.html#cb148-1"></a>ATrichstateprobs    &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.39</span>, <span class="fl">0.1</span>, <span class="fl">0.1</span>, <span class="fl">0.41</span>) <span class="co"># Set the values of the probabilities, for the AT-rich state</span></span></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="hidden-markov-models.html#cb149-1"></a>GCrichstateprobs    &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.41</span>, <span class="fl">0.39</span>, <span class="fl">0.1</span>) <span class="co"># Set the values of the probabilities, for the GC-rich state</span></span></code></pre></div>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="hidden-markov-models.html#cb150-1"></a>theemissionmatrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(ATrichstateprobs, GCrichstateprobs), <span class="dv">2</span>, <span class="dv">4</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>) <span class="co"># Create a 2 x 4 matrix</span></span></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="hidden-markov-models.html#cb151-1"></a><span class="kw">rownames</span>(theemissionmatrix) &lt;-<span class="st"> </span>states</span></code></pre></div>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="hidden-markov-models.html#cb152-1"></a><span class="kw">colnames</span>(theemissionmatrix) &lt;-<span class="st"> </span>nucleotides</span></code></pre></div>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="hidden-markov-models.html#cb153-1"></a>theemissionmatrix                              <span class="co"># Print out the emission matrix</span></span></code></pre></div>
+<p>There is a row in the emission matrix for each possible state, and the columns give the probabilities of choosing each of the four possible nucleotides when in a particular state. For example, the value in the second row and third column of the emission matrix above is 0.39, which is the probability of choosing a “G” when in the “GC-rich state” (ie. when using the “GC-rich” roulette wheel).</p>
+</div>
+<div id="generating-a-dna-sequence-using-a-hmm" class="section level2">
+<h2><span class="header-section-number">14.9</span> Generating a DNA sequence using a HMM</h2>
+<p>The following function generatehmmseq() can be used to generate a DNA sequence using a particular HMM. As its arguments (inputs), it requires the parameters of the HMM: the HMM transmission matrix and HMM emission matrix.</p>
+<p>When you are generating a DNA sequence using a HMM, the nucleotide is chosen at each position depending on the state at the previous position in the sequence. As there is no previous nucleotide at the first position in the sequence, the function generatehmmseq() also requires the probabilities of the choosing each of the states at the first position (eg. ΠAT-rich and ΠGC-rich being the probability of the choosing the “AT-rich” or “GC-rich” states at the first position for a HMM with these two states).</p>
+<p>We can use the generatehmmseq() function to generate a sequence using a particular HMM. For example, to create a sequence of 30 nucleotides using the HMM with “AT-rich” and “GC-rich” states described in the transition matrix thetransitionmatrix, the emission matrix theemissionmatrix, and uniform starting probabilities (ie. ΠAT-rich = 0.5, ΠGC-rich = 0.5), we type:</p>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="hidden-markov-models.html#cb154-1"></a>theinitialprobs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="hidden-markov-models.html#cb155-1"></a><span class="kw">generatehmmseq</span>(thetransitionmatrix, theemissionmatrix, theinitialprobs, <span class="dv">30</span>)</span></code></pre></div>
+<p>As you can see, the nucleotides generated by the GC-rich state are mostly but not all “G”s and “C”s (because of the high values of pG and pC for the GC-rich state in the HMM emission matrix), while the nucleotides generated by the AT-rich state are mostly but not all “A”s and “T”s (because of the high values of pT and pA for the AT-rics state in the HMM emission matrix).</p>
+<p>Furthermore, there tends to be runs of nucleotides that are either all in the GC-rich state or all in the AT-rich state, as the transition matrix specifies that the probabilities of switching from the AT-rich to GC-rich state (probability 0.3), or GC-rich to AT-rich state (probability 0.1) are relatively low.</p>
+</div>
+<div id="inferring-the-states-of-a-hmm-that-generated-a-dna-sequence" class="section level2">
+<h2><span class="header-section-number">14.10</span> Inferring the states of a HMM that generated a DNA sequence</h2>
+<p>If we have a HMM with two states, “GC-rich” and “AT-rich”, and we know the transmission and emission matrices of the HMM, can we take some new DNA sequence, and figure out which state (GC-rich or AT-rich) is the most likely to have generated each nucleotide position in that DNA sequence? This is a common problem in bioinformatics. It is called the problem of finding the most probable state path, as it essentially consists of assigning the most likely state to each position in the DNA sequence. The problem of finding the most probable state path is also sometimes called segmentation. For example, give a DNA sequence of 1000 nucleotides, you may wish to use your HMM to segment the sequence into blocks that were probably generated by the “GC-rich” state or by the “AT-rich” state.</p>
+<p>The problem of finding the most probable state path given a HMM and a sequence (ie. the problem of segmenting a sequence using a HMM), can be solved by an algorithm called the Viterbi algorithm. As its output, the Viterbi algorithm gives for each nucleotide position in a DNA sequence, the state of your HMM that most probably generated the nucleotide in that position. For example, if you segmented a particular DNA sequence of 1000 nucleotides using a HMM with “AT-rich” and “GC-rich” states, the Viterbi algorithm may tell you that nucleotides 1-343 were most probably generated by the AT-rich state, nucleotides 344-900 were most probably generated by the GC-rich state, and 901-1000 were most probably generated by the AT-rich state.</p>
+<p>The following function viterbi() is a function for the Viterbi algorithm:</p>
+<p>The viterbi() function requires a second function makeViterbimat():</p>
+<p>Given a HMM, and a particular DNA sequence, you can use the Viterbi function to find the state of that HMM that was most likely to have generated the nucleotide at each position in the DNA sequence:</p>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="hidden-markov-models.html#cb156-1"></a>myseq &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;T&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;A&quot;</span>, <span class="st">&quot;T&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;T&quot;</span>, <span class="st">&quot;G&quot;</span>, <span class="st">&quot;T&quot;</span>, <span class="st">&quot;C&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="hidden-markov-models.html#cb157-1"></a><span class="kw">viterbi</span>(myseq, thetransitionmatrix, theemissionmatrix)</span></code></pre></div>
+</div>
+<div id="a-hidden-markov-model-of-protein-sequence-evolution" class="section level2">
+<h2><span class="header-section-number">14.11</span> A Hidden Markov Model of protein sequence evolution</h2>
+<p>We have so far talked about using HMMs to model DNA sequence evolution. However, it is of course possible to use HMMs to model protein sequence evolution. When using a HMM to model DNA sequence evolution, we may have states such as “AT-rich” and “GC-rich”. Similarly, when using a HMM to model protein sequence evolution, we may have states such as “hydrophobic” and “hydrophilic”. In a protein HMM with “hydrophilic” and “hydrophilic” states, the “hydrophilic” HMM will have probabilities pA, pR, pC… of choosing each of the 20 amino acids alanine (A), arginine (R), cysteine (C), etc. when in that state. Similarly, the “hydrophilic” state will have different probabilities pA, pR, pC… of choosing each of the 20 amino acids. The probability of choosing a hydrophobic amino acid such as alanine will be higher in the “hydrophobic” state than in the “hydrophilic” state (ie. pA of the “hydrophobic” state will be higher than the pA of of the “hydrophilic” state, where A represents alanine here). A HMM of protein sequence evolution also defines a certain probability of switching from the “hydrophilic” state to the “hydrophobic” state, and a certain probability of switching from the “hydrophobic” state to the “hydrophilic” state.</p>
+</div>
+<div id="summary-2" class="section level2">
+<h2><span class="header-section-number">14.12</span> Summary</h2>
+<p>In this practical, you will have learnt to use the following R functions:</p>
+<p>numeric() for making a vector for storing numbers
+character() for making a vector for storing characters
+matrix() for making a matrix variable
+rownames() for assigning names to the rows of a matrix variable
+colnames() for assigning names to the columns of a matrix variable
+sample() for making a random sample of numbers from a vector of numbers
+All of these functions belong to the standard installation of R.</p>
+</div>
+<div id="exercises-2" class="section level2">
+<h2><span class="header-section-number">14.13</span> Exercises</h2>
+<p>Answer the following questions, using the R package. For each question, please record your answer, and what you typed into R to get this answer.</p>
+<ol style="list-style-type: decimal">
+<li>In a previous practical, you saw that the Bacteriophage lambda genome sequence (NCBI accession NC_001416) has
+long stretches of either very GC-rich (mostly in the first half of the genome) or very AT-rich sequence (mostly in the second half of the genome). Use a HMM with two different states (“AT-rich” and “GC-rich”) to infer which state of the HMM is most likely to have generated each nucleotide position in the Bacteriophage lambda genome sequence. For the AT-rich state, set pA= 0.27, pC= 0.2084, pG= 0.198, and pT= 0.3236. For the GC-rich state, set pA= 0.2462, pC= 0.2476, pG= 0.2985, and pT= 0.2077. Set the probability of switching from the AT-rich state to the GC-rich state to be 0.0002, and the probability of switching from the GC-rich state to the AT-rich state to be 0.0002. What is the most probable state path?</li>
+<li>Given a HMM with four different states (“A-rich”, “C-rich”, “G-rich” and “T-rich”), infer which state of
+the HMM is most likely to have generated each nucleotide position in the Bacteriophage lambda genome sequence. For the A-rich state, set pA= 0.3236, pC= 0.2084, pG= 0.198, and pT= 0.27. For the C-rich state, set pA= 0.2462, pC= 0.2985, pG= 0.2476, and pT= 0.2077. For the G-rich state, set pA= 0.2462, pC= 0.2476, pG= 0.2985, and pT= 0.2077. For the T-rich state, set pA= 0.27, pC= 0.2084, pG= 0.198, and pT= 0.3236. Set the probability of switching from the A-rich state to any of the three other states to be 6.666667e-05. Likewise, set the probability of switching from the C-rich/G-rich/T-rich state to any of the three other states to be 6.666667e-05. What is the most probable state path? Do you find differences between these results and the results from simply using a two-state HMM (as in Q1)?</li>
+<li>Make a two-state HMM to model protein sequence evolution, with “hydrophilic” and “hydrophobic” states.
+For the hydrophilic state, set pA= 0.02, pR= 0.068, pN= 0.068, pD= 0.068, pC= 0.02, pQ= 0.068, pE= 0.068, pG= 0.068, pH= 0.068, pI= 0.012, pL= 0.012, pK= 0.068, pM= 0.02, pF= 0.02, pP= 0.068, pS= 0.068, pT= 0.068, pW= 0.068, pY= 0.068, and pV= 0.012. For the hydrophobic state, set pA= 0.114, pR= 0.007, pN= 0.007, pD= 0.007, pC= 0.114, pQ= 0.007, pE= 0.007, pG= 0.025, pH= 0.007, pI= 0.114, pL= 0.114, pK= 0.007, pM= 0.114, pF= 0.114, pP= 0.025, pS= 0.026, pT= 0.026, pW= 0.025, pY= 0.026, and pV= 0.114. Set the probability of switching from the hydrophilic state to the hydrophobic state to be 0.01. Set the probability of switching from the hydrophobic state to the hydrophilic state to be 0.01. Now infer which state of the HMM is most likely to have generated each amino acid position in the the human odorant receptor 5BF1 protein (UniProt accession Q8NHC7). What is the most probable state path? The odorant receptor is a 7-transmembrane protein, meaning that it crosses the cell membrane seven times. As a consequence the protein has seven hydrophobic regions that cross the fatty cell membrane, and seven hydrophilic segments that touch the watery cytoplasm and extracellular environments. What do you think are the coordinates in the protein of the seven transmembrane regions?</li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="comparative-genomics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="multiple-alignment-with-clustal.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["compbio4all.pdf", "compbio4all.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
