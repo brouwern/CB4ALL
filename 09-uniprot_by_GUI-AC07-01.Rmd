@@ -1,6 +1,8 @@
 # Downloading sequences from UniProt by hand
 
-The following information was modified and updated from Coghlan's "Pairwise Sequence Alignment: UniProt" https://a-little-book-of-r-for-bioinformatics.readthedocs.io/en/latest/src/chapter4.html
+**By**: Avril Coghlan.  Adapted and edited by Nathan Brouwer.
+
+
 The original online version has images, though they are somewhat outdated.
 
 

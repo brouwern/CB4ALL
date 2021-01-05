@@ -1,20 +1,9 @@
----
-title: "Testing the significance of an alignment"
-author: "Nathan Brouwer"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{Testing the significance of an alignment}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
----
+## Testing the significance of an alignment
+
+**By**: Avril Coghlan.  Adapted and edited by Nathan Brouwer.
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  warnings = FALSE,
-  cache = TRUE,
   eval= FALSE     # This tutorialhas not been revised
 )
 ```

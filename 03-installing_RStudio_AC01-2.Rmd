@@ -1,6 +1,8 @@
-# Downloading RStudio
+# Downloading the RStudio 
 
-## Installing RStudio
+**By:** Nathan Brouwer
+
+## Installing the RStudio IDE
 
 R is a programming language, and when you download it there is also a basic GUI (graphical user interface) that you can access via the R icon.
 
@@ -15,4 +17,4 @@ A good overview of what the different parts of RStudio can be seen in the image 
 
 ## RStudio versus RStudio Cloud
 
-RStudio and RStudio cloud work almost identially, so anything you read about RStudio will apply to RStudio Cloud.
+RStudio and RStudio cloud work almost identically, so anything you read about RStudio will apply to RStudio Cloud.

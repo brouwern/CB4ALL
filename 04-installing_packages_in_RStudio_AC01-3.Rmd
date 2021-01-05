@@ -1,11 +1,11 @@
 # Installing R packages
 
-R is a programming language, and **packages** or **libraries** are bundles of software build using R.  Most sessions using R involve using additional R packages.  
+R is a programming language, and **packages** or **libraries** are bundles of software built using R.  Most sessions using R involve using additional R packages.  This is especially true for bioinformatics and computational biology.
 
 >**NOTE**: If you are working in an RStudio Cloud environment organized by someone else (eg a course instructor), they likely are taking care of many of the package management issues.  The following information is still useful to be familiar with.
 
 
-## Downloading packages with the RStudio GUI
+## Downloading packages with the RStudio IDE
 
 There is a point-and-click interface for installing R packages in RStudio.  There is a brief introduction to downloading packages on this site: http://web.cs.ucla.edu/~gulzar/rstudio/ 
 

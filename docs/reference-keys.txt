@@ -1,17 +1,16 @@
 introduction
-changes-made-to-original-source
 downloading-r
 introduction-to-r
 installing-r
 installing-r-on-a-windows-pc
 how-to-install-r-on-non-windows-computers-eg.-macintosh-or-linux-computers
 starting-r
-downloading-rstudio
-installing-rstudio
+downloading-the-rstudio
+installing-the-rstudio-ide
 getting-to-know-rstudio
 rstudio-versus-rstudio-cloud
 installing-r-packages
-downloading-packages-with-the-rstudio-gui
+downloading-packages-with-the-rstudio-ide
 downloading-packages-with-the-function-install.packages
 using-packages-after-they-are-downloaded
 installing-bioconductor
@@ -22,6 +21,8 @@ vocabulary
 r-functions-etc
 a-brief-introduction-to-r
 links-and-further-reading
+downloading-ncbi-sequence-data-by-hand
+retrieving-genome-sequence-data-via-the-ncbi-website
 introduction-to-ncbi-databases
 to-do
 the-ncbi-sequence-database
@@ -32,8 +33,6 @@ refseq
 querying-the-ncbi-database
 querying-the-ncbi-database-via-the-ncbi-website-for-reference
 example-finding-the-sequences-published-in-nature-460352-358-for-reference
-downloading-ncbi-sequence-data-by-hand
-retrieving-genome-sequence-data-via-the-ncbi-website
 downloading-sequences-from-uniprot-by-hand
 vocab
 uniprot
@@ -51,6 +50,7 @@ note-on-the-biology-in-this-section
 vocabulary-1
 reading-sequence-data-with-rentrezentrez_fetch
 local-variation-in-gc-content
+a-sliding-window-analysis-of-gc-content
 acknowledgements-1
 license
 exercises
@@ -64,6 +64,7 @@ discarding-very-poorly-conserved-regions-from-an-alignment
 calculating-genetic-distances-between-protein-sequences
 unrooted-neighbor-joining-phylogenetic-trees
 building-an-unrooted-phylogenetic-tree-for-protein-sequences
+testing-the-significance-of-an-alignment
 calculating-the-statistical-significance-of-a-pairwise-global-alignment
 summary-1
 retrieving-multiple-sequences-in-r
@@ -77,9 +78,8 @@ lengths-of-open-reading-frames
 significance-of-orfs
 identifying-significant-open-reading-frames
 summary-2
-rooted-neighbor-joing-phylogenetic-trees
+rooted-neighbor-joining-phylogenetic-trees
 building-a-rooted-phylogenetic-tree-for-protein-sequences
 building-a-phylogenetic-tree-for-dna-or-mrna-sequences
 summary-3
 todo
-rooted-neighbor-joining-phylogenetic-trees

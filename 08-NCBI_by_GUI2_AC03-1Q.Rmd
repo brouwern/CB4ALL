@@ -1,7 +1,7 @@
 
 # Introduction to NCBI databases
 
-By Avril Coglan, adapted by Nathan Brouwer
+**By**: Avril Coghlan.  Adapted and edited by Nathan Brouwer.
 
 This vignette provides an introduction to the general search features of the NCBI databases, including how to search by both accession numbers and other search parameters, such as specific papers.  For example, if you don't know the accession number of a sequence, you can locate it via a paper that worked on that sequence.
 
@@ -160,7 +160,7 @@ If you click on the word “Genome”, it will bring you to the NCBI record for 
 
 Therefore, in Nature volume 460, page 352, the *Schistosoma mansoni* genome sequence was published, along with all the DNA sequence contigs that were sequenced for the genome project, and all the predicted proteins for the gene predictions made in the genome sequence. You can view the original paper on the Nature website at http://www.nature.com/nature/journal/v460/n7253/abs/nature08160.html.
 
-Note: *Schistmosoma mansoni* is a parasitic worm that is responsible for causing schistosomiasis, which is classified by the WHO as a neglected tropical disease.
+Note: *Schistmosoma mansoni* is a parasitic worm that is responsible for causing **schistosomiasis**, which is classified by the WHO as a **neglected tropical disease**.
 
 
 

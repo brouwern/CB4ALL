@@ -1,6 +1,8 @@
 # Brief introduction to R
 
-This chapter provides a brie introduction to R.  At the end of are links to additional resources for getting started with R.
+**By**: Avril Coghlan.  Adapted and edited by Nathan Brouwer.
+
+This chapter provides a brief introduction to R.  At the end of are links to additional resources for getting started with R.
 
 
 ## Vocabulary

@@ -1,5 +1,7 @@
 # Sequence Databases
 
+**By**: Avril Coghlan.  Adapted and edited by Nathan Brouwer.
+
 
 ## Querying the NCBI Database via R
 

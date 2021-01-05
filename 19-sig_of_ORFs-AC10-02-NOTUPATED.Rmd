@@ -1,5 +1,7 @@
 # Significance of ORFs
 
+**By**: Avril Coghlan.  Adapted and edited by Nathan Brouwer.
+
 ```{r  include = FALSE}
 knitr::opts_chunk$set(
   eval= FALSE     # This tutorial has not been revised

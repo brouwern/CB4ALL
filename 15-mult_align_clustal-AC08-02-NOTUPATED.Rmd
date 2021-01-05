@@ -1,6 +1,6 @@
 # Multiple alignment with Clustal
 
-By: Avril Coghlan, adapted by Nathan Brouwer
+**By**: Avril Coghlan.  Adapted and edited by Nathan Brouwer.
 
 ```{r include = FALSE}
 knitr::opts_chunk$set(

@@ -1,5 +1,6 @@
 --- 
-title: "Computational Biology for All"
+title: "Computational Biology for All!"
+subtitle: "An introduction to bioinformatics and computational biology using R"
 author: "Avril Coglan and Nathan Brouwer"
 date: "`r Sys.Date()`"
 site: bookdown::bookdown_site
@@ -12,7 +13,22 @@ description: "A bioinformatics and computational biology book"
 
 # Preface {-}
 
-This book is based Dr. Avril Coghlan's [*A little book of R for bioinformatics.*](https://a-little-book-of-r-for-bioinformatics.readthedocs.io/en/latest/index.html).  Much of the text and code was originally written by Dr. Coghlan and distributed under the [Creative Commons 3.0](https://creativecommons.org/licenses/by/3.0/us/) license. 
+This book is based on Dr. Avril Coghlan's [*A little book of R for bioinformatics.*](https://a-little-book-of-r-for-bioinformatics.readthedocs.io/en/latest/index.html).  Most of the text and code was originally written by Dr. Coghlan and distributed under the [Creative Commons 3.0](https://creativecommons.org/licenses/by/3.0/us/) license. 
+
+I have edited, updated and augmented the book for use as a text for the University of Pittsburgh Department of Biological Science's Computational Biology Course.
+
+To meet the needs of my course I have
+
+1. Edited the original HTML document into RMarkdown 
+1. Post the book using bookdown
+1. Used the RStudio IDE instead of the basic R IDE
+1. Split up Coghlan's original chapters into shorter lessons
+1. Placed functions written by Coghlan into an R package called biodata instead of requiring that they be loaded by hand.  
+1. Changed which functions or packages are used; for example, replacing some SeqinR functions with rentrez functions
+1. Added additional plots and changed some plotting functions, such as using ggplot2 and ggpubr.
+1. Removed .jpg images; I hope to add these back
+1. Fixed typos, removed dead links,  added additional links, turned links to hypertext, converted to American English (sorry!)
+1. Added summary sections at the beginning listing the functions, vocabulary, software, organism, accession numbers
 
 To compile this  to PDF, you need XeLaTeX. You are recommended to install TinyTeX (which includes XeLaTeX): <https://yihui.org/tinytex/>.
 

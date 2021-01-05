@@ -1,9 +1,10 @@
 # Local variation in GC content - NOT UPDATED
 
- 
-By: Avril Coghlan, adapted by Nathan Brouwer
+
+**By**: Avril Coghlan.  Adapted and edited by Nathan Brouwer.
 
 ```{r include = FALSE}
+## SET to NOT evaluate any code b/c it has not been updated
 knitr::opts_chunk$set(
   eval = FALSE    # THIS TUTORIAL HAS NOT BEEN UPDATED!!!!!!!
 )
@@ -13,7 +14,7 @@ knitr::opts_chunk$set(
 
 **TODO**
 
-need fasta clearn function put into biodata
+need fasta clean function put into biodata
 
 
 Preliminaries
@@ -30,9 +31,9 @@ Some of the biology in this tutorial appears to be out of date.  For example, us
 
 ## Vocabulary
 
-[**GC content**](https://en.wikipedia.org/wiki/GC-content)
-[**horizontal transfer**](en.wikipedia.org/wiki/Horizontal_gene_transfer)
-**local variation** in GC content
+* [**GC content**](https://en.wikipedia.org/wiki/GC-content)
+* [**horizontal transfer**](en.wikipedia.org/wiki/Horizontal_gene_transfer)
+* **local variation** in GC content ...
 
 ## Reading sequence data with rentrez::entrez_fetch
 
@@ -92,13 +93,17 @@ If a chunk of DNA has moved by horizontal transfer from the genome of a species 
 
 On the other hand, a region unusually low GC content in an otherwise high-GC content genome could also arise due to biases in mutation in that region of the genome, for example, if mutations from Gs/Cs to Ts/As are more common for some reason in that region of the genome than in the rest of the genome.
 
-A sliding window analysis of GC content
+## A sliding window analysis of GC content
+
 In order to study local variation in GC content within a genome sequence, we could calculate the GC content for small chunks of the genome sequence. The DEN-1 Dengue virus genome sequence is 10735 nucleotides long. To study variation in GC content within the genome sequence, we could calculate the GC content of chunks of the DEN-1 Dengue virus genome, for example, for each 2000-nucleotide chunk of the genome sequence:
 
- GC(dengueseq[1:2000])      # Calculate the GC content of nucleotides 1-2000 of the Dengue genome
+```{r}
+GC(dengueseq[1:2000])      # Calculate the GC content of nucleotides 1-2000 of the Dengue genome
 
 
- GC(dengueseq[2001:4000])   # Calculate the GC content of nucleotides 2001-4000 of the Dengue genome
+GC(dengueseq[2001:4000])   # Calculate the GC content of nucleotides 2001-4000 of the Dengue genome
+
+```
 
  
  
@@ -106,16 +111,22 @@ From the output of the above calculations, we see that the region of the DEN-1 D
 
 Instead of typing in the commands above to tell R to calculate the GC content for each 2000-nucleotide chunk of the DEN-1 Dengue genome, we can use a for loop to carry out the same calculations, but by typing far fewer commands. That is, we can use a for loop to take each 2000-nucleotide chunk of the DEN-1 Dengue virus genome, and to calculate the GC content of each 2000-nucleotide chunk. Below we will explain the following for loop that has been written for this purpose:
 
- starts <- seq(1, length(dengueseq)-2000, by = 2000)
- starts
+```{r}
+starts <- seq(1, length(dengueseq)-2000, by = 2000)
+starts
+```
+
 
  
+```{r}
  n <- length(starts)    # Find the length of the vector "starts"
  for (i in 1:n) {
         chunk <- dengueseq[starts[i]:(starts[i]+1999)]
         chunkGC <- GC(chunk)
         print (chunkGC)
      }
+```
+
 
 	 
 The command “starts <- seq(1, length(dengueseq)-2000, by = 2000)” stores the result of the seq() command in the vector starts, which contains the values 1, 2001, 4001, 6001, and 8001.

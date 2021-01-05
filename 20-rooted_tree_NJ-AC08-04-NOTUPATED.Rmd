@@ -1,6 +1,6 @@
 # Rooted Neighbor-joining Phylogenetic trees
 
-By: Avril Coghlan, adapted by Nathan Brouwer
+**By**: Avril Coghlan.  Adapted and edited by Nathan Brouwer.
 
 ```{r include = FALSE}
 knitr::opts_chunk$set(
